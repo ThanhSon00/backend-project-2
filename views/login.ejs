@@ -22,66 +22,76 @@
   
 
   
-  <div class="content">
-    <div class="container">
-      <div class="row justify-content-center">
-        <!-- <div class="col-md-6 order-md-2">
-          <img src="images/undraw_file_sync_ot38.svg" alt="Image" class="img-fluid">
-        </div> -->
-        <div class="col-md-6 contents">
-          <div class="row justify-content-center">
-            <div class="col-md-12">
-              <div class="form-block">
-                  <div class="mb-4">
-                  <h3>Sign In to <strong>My Application</strong></h3>
-                  <p class="mb-4"></p>
+    <div class="content">
+      <div class="container">
+        <div class="row justify-content-center">
+          <!-- <div class="col-md-6 order-md-2">
+            <img src="images/undraw_file_sync_ot38.svg" alt="Image" class="img-fluid">
+          </div> -->
+          <div class="col-md-6 contents">
+            <div class="row justify-content-center">
+              <div class="col-md-12" style="
+  ">
+                <div class="form-block">
+                    <div class="mb-4">
+                    <h3>Sign In to <strong>Chat Application</strong></h3>
+                    <p class="mb-4"></p>
+                  </div>
+                  <% if (locals.message) { %> 
+                    <h5 class="error-message"> <%= message %> </h1>
+                  <% } %>
+                  <form action="/authentication" method="post">
+                    <div class="form-group first">
+                      <label for="email">Email</label>
+                      <input type="text" class="form-control" name="email" id="email">
+  
+                    </div>
+                    <div class="form-group last mb-4">
+                      <label for="password">Password</label>
+                      <input type="password" class="form-control" name="password" id="password">
+                    </div>
+                    
+                    <div class="d-flex mb-5 align-items-center">
+                      <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
+                        <input type="checkbox" name="remember" checked="checked">
+                        <div class="control__indicator"></div>
+                      </label>
+                      <span class="ml-auto"><a href="http://localhost:8080/forgot-password" class="forgot-pass" style="
+      color: #aaa9a9;
+  ">Forgot Password</a></span> 
+                    </div>
+  
+                    <input type="submit" value="Log In" class="btn btn-pill text-white btn-block btn-primary">
+                    
+  
+                    <span class="d-block text-center my-4 text-muted"> or sign in with</span>
+                    
+                    <div class="social-login text-center">
+                      <a href="http://localhost:8080/login#" class="facebook">
+                        <span class="icon-facebook mr-3"></span> 
+                      </a>
+                      <a href="http://localhost:8080/login#" class="twitter">
+                        <span class="icon-twitter mr-3"></span> 
+                      </a>
+                      <a>
+                        <div id="g_id_onload" data-client_id="525865511033-fbg0hc435gdok777v1audt63n7hfjhdb.apps.googleusercontent.com" data-context="signin" data-ux_mode="redirect" data-login_uri="http://localhost:8080/authentication" data-auto_prompt="false">
+                        </div>
+                        
+                        <div class="g_id_signin" data-type="icon" data-shape="circle" data-theme="filled_blue" data-text="signin_with" data-size="large"><div class="S9gUrf-YoZ4jf" style="position: relative;"><div></div><iframe src="./Login to application_files/button.html" id="gsi_10394_260850" title="Nút Đăng nhập bằng Google" style="display: block; position: relative; top: 0px; left: 0px; height: 88px; width: 128px; border: 0px; margin: -2px -12px;"></iframe></div></div>
+                      </a>
+                    </div>
+                  </form>
                 </div>
-                <form action="/login" method="post">
-                  <div class="form-group first">
-                    <label for="phoneNumber">Phone Number</label>
-                    <input type="text" class="form-control" name="phoneNumber" id="phoneNumber">
-
-                  </div>
-                  <div class="form-group last mb-4">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" id="password">
-                  </div>
-                  
-                  <div class="d-flex mb-5 align-items-center">
-                    <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
-                      <input type="checkbox" checked="checked"/>
-                      <div class="control__indicator"></div>
-                    </label>
-                    <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span> 
-                  </div>
-
-                  <input type="submit" value="Log In" class="btn btn-pill text-white btn-block btn-primary">
-
-                  <span class="d-block text-center my-4 text-muted"> or sign in with</span>
-                  
-                  <div class="social-login text-center">
-                    <a href="#" class="facebook">
-                      <span class="icon-facebook mr-3"></span> 
-                    </a>
-                    <a href="#" class="twitter">
-                      <span class="icon-twitter mr-3"></span> 
-                    </a>
-                    <a href="#" class="google">
-                      <span class="icon-google mr-3"></span> 
-                    </a>
-                  </div>
-                </form>
               </div>
             </div>
+            
           </div>
           
         </div>
-        
       </div>
     </div>
-  </div>
 
-  
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
