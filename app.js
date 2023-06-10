@@ -4,11 +4,19 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
+const originURL = `${process.env.PROTOCOL}://${process.env.DOMAIN}:${process.env.PORT}`;
+const { StatusCodes } = require('http-status-codes');
+const { otherTokenAttr } = require('./setting/attributes');
 
 // Routes
 const loginRoutes = require('./routes/login');
 const userRoutes = require('./routes/user');
+const homeRoutes = require('./routes/home');
+const sessionRoutes = require('./routes/session');
+const loginRoutes = require('./routes/login');
+const forgotPwdRoutes = require('./routes/forgotPassword');
+const resetPwdRoutes = require('./routes/resetPassword');
+
 // Middleware
 const asyncWrapper = require('./middleware/asyncWrapper');
 
@@ -24,13 +32,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/v1/users', userRoutes);
-
 app.get('/', (req, res) => {
   res.redirect('/login');
 });
 
-app.use('/login', asyncWrapper(loginRoutes));
+app.use('/login', checkLogged, loginRoutes);
+app.use('/authentication', authenticationRoutes);
+app.use('/home', authenticateUser, homeRoutes);
+app.use('/forgot-password', checkLogged, forgotPwdRoutes);
+app.use('/reset-password', checkLogged, resetPwdRoutes);
+
+// Rest api
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/sessions', sessionRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
