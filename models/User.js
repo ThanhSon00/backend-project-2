@@ -9,7 +9,11 @@ const userSchema = new mongoose.Schema({
     password: String,
     email: { type: String, unique: true },
     groups: Array,
-    notifications: Array
+    notifications: Array,
+    token: String,
+    selector: Number,
+    validator: String,
+    isGoogleUser: Boolean
 });
 
 userSchema.pre('save', async function (next) {
@@ -22,6 +26,17 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('findOneAndUpdate', async function (next) {
+  const user = this;
+  if (!user._update.validator) return next();
+  const secret = process.env.SHA256_SECRET;
+  const message = user._update.validator.toString();
+  const hash = crypto.createHmac('sha256', secret)
+                     .update(message)
+                     .digest('hex');
+  user._update.validator = hash
+  next();
+});
 
 const User = mongoose.model('user', userSchema);
 

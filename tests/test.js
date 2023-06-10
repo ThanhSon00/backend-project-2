@@ -1,24 +1,20 @@
-const ChatLine = require('../models/ChatLine');
-const Conversation = require('../models/Conversation');
-const Notification = require('../models/Notification');
-const User = require('../models/User');
+const express = require('express')
+const app = express()
+const router = express.Router()
 
-(async () => {
-    const user1 = new User({
-        groups: [],
-        notifications: [],
-        name: "Phan Hoàng Thanh Sơn",
-        avatar: "https://domain/avatar",
-        password: "encrypted password",
-        phoneNumber: "094 366 7980",
-        title: "son"
-    });
-    await user1.save();
+// predicate the router with a check and bail out when needed
+router.use((req, res, next) => {
+  if (!req.headers['x-auth']) return next('router')
+  next()
+})
 
-    const users = await User.find();
-    const userID = users[0]._id;
-    const chatLine1 = new ChatLine({
-        description: "First Comment",
-        userID: userID
-    })
-})()
+router.get('/user/:id', (req, res) => {
+  res.send('hello, user!')
+})
+
+// use the router and 401 anything falling through
+app.use('/admin', router, (req, res) => {
+  res.sendStatus(401)
+})
+
+app.listen(4000);

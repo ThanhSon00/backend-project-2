@@ -9,7 +9,7 @@ const { StatusCodes } = require('http-status-codes');
 const { otherTokenAttr } = require('./setting/attributes');
 
 // Routes
-const loginRoutes = require('./routes/login');
+const authenticationRoutes = require('./routes/authentication');
 const userRoutes = require('./routes/user');
 const homeRoutes = require('./routes/home');
 const sessionRoutes = require('./routes/session');
@@ -18,7 +18,8 @@ const forgotPwdRoutes = require('./routes/forgotPassword');
 const resetPwdRoutes = require('./routes/resetPassword');
 
 // Middleware
-const asyncWrapper = require('./middleware/asyncWrapper');
+const checkLogged = require('./middleware/checkLogged');
+const authenticateUser = require('./middleware/authenticateUser');
 
 const app = express();
 
