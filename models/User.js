@@ -13,8 +13,9 @@ const userSchema = new mongoose.Schema({
     token: String,
     selector: Number,
     validator: String,
+    lockToken: String,
     isGoogleUser: Boolean
-});
+  });
 
 userSchema.pre('save', async function (next) {
   const user = this;

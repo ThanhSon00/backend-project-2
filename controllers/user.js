@@ -2,7 +2,7 @@ const User = require('../models/User');
 const { StatusCodes } = require('http-status-codes')
 const crypto = require('crypto');
 const validator = require('validator');
-const defaultFields = 'email password name avatar title token selector validator isGoogleUser';
+const defaultFields = 'email password name avatar title token selector validator isGoogleUser lockToken';
 
 const getUsers = async (req, res) => {
     const filters = req.query;
@@ -42,6 +42,7 @@ const createUser = async (req, res) => {
         token: "",
         selector: "",
         validator: "",
+        lockToken: "",
     });
 
     return res.status(StatusCodes.CREATED).json(user);

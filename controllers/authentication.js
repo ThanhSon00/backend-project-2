@@ -56,11 +56,12 @@ const clearAllTokens = (res) => {
 }
 
 const sendMailResetPwd = async (req, res) => {
-    const { email: recipient } = req.body;
+    const { email: recipient, _id: userID } = req.body;
     const token = uuidv4();
     const urlToken = `${originURL}/reset-password/${token}`;
     const resetPwdForm = await renderFileAsync("./views/request-reset-password.ejs", { urlToken })
     await sendMail(recipient, resetPwdForm);
+    await makeRequest(`/api/v1/users/${userID}`, 'PATCH', { lockToken: token });
     return res.redirect(`${originURL}/notification`);
 }
 
