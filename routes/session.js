@@ -19,9 +19,9 @@ router.route('/:accessToken')
     .get(checkAccessToken, asyncWrapper(getSession))
     .delete(checkAccessToken, asyncWrapper(deleteSession));
 
-// GET
-router.route('/')
-    .post(validateLoginInput, login, asyncWrapper(createSession))
+// POST
+router.route('/').post(validateLoginInput)
+router.route('/').post(login, asyncWrapper(createSession))
 
 // PATCH 1
 router.route('/').patch(checkRefreshToken, checkRememberToken);
