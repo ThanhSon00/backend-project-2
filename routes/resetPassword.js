@@ -5,7 +5,6 @@ const {
     renderPage,
 } = require('../controllers/resetPassword');
 
-router.route('/')
-    .get(renderPage);
-
+router.route('/:token')
+    .get(renderPage)
 module.exports = router;
