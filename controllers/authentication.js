@@ -14,7 +14,9 @@ const login = async (req, res) => {
         rememberMe,
         credential,
     })
-
+    if (!tokens) {
+        return res.redirect(`${originURL}/login`);
+    }
     await setCookies(res, tokens);
     return res.redirect(`${originURL}/home`);
 }
