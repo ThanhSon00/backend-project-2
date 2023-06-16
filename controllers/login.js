@@ -1,9 +1,10 @@
 const { otherTokenAttr } = require("../setting/attributes");
 
 const renderPage = async (req, res) => {
-    const { message } = req.cookies;
+    const { message, notification } = req.cookies;
     res.clearCookie('message', otherTokenAttr);
-    return res.render('login', { message });
+    res.clearCookie('notification', otherTokenAttr);
+    return res.render('login', { message, notification });
 }
 
 module.exports = {
