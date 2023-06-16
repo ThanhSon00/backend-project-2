@@ -2,13 +2,13 @@ const axios = require('axios');
 const domain = process.env.DOMAIN;
 const protocol = process.env.PROTOCOL;
 const port = process.env.PORT;
-const origin = `${protocol}://${domain}:${port}`;
+const originURL = `${protocol}://${domain}:${port}`;
 
 const makeRequest = async (path, method, body, callback) => {
     let response, err;
     try {
         response = await axios({
-            url: `${origin}${path}`,
+            url: `${originURL}${path}`,
             method: method,
             data: body
         });
@@ -30,4 +30,5 @@ const makeRequest = async (path, method, body, callback) => {
 
 module.exports = {
     makeRequest,
+    originURL,
 }
