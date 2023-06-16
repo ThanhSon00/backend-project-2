@@ -5,17 +5,22 @@ const { StatusCodes } = require('http-status-codes');
 const loginHandler = async (req, res) => {
     const { email, password, remember: rememberMe, credential } = req.body;
     // Create and save session details to database
-    const tokens = await makeRequest(`/api/v1/sessions`, 'POST', {
+    makeRequest(`/api/v1/sessions`, 'POST', {
         email,
         password,
         rememberMe,
         credential,
+    }, (err, tokens) => {
+        if (err) {
+            if (err.response?.status === StatusCodes.UNAUTHORIZED || 
+                err.response?.status === StatusCodes.BAD_REQUEST) {
+                res.cookie('message', err.response.data, otherTokenAttr);
+            }
+            return res.redirect(`${originURL}/login`);
+        }
+        setCookies(res, tokens);
+        return res.redirect(`${originURL}/home`);
     })
-    if (!tokens) {
-        return res.redirect(`${originURL}/login`);
-    }
-    await setCookies(res, tokens);
-    return res.redirect(`${originURL}/home`);
 }
 
 const refreshSession = async (req, res) => {
