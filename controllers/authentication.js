@@ -22,6 +22,8 @@ const loginHandler = async (req, res) => {
         return res.redirect(`${originURL}/home`);
     })
 }
+const setTokens = require('../modules/setTokens');
+const clearAllTokens = require('../modules/clearAllTokens');
 
 const refreshSession = async (req, res) => {
     const redirect = req.cookies.redirect || 'back';
@@ -33,17 +35,10 @@ const refreshSession = async (req, res) => {
             clearAllTokens(res);
             return res.redirect('back');
         }
-        setCookies(res, tokens);
+        setTokens(res, tokens);
         if (redirect === 'back') return res.redirect('back');
-        return res.redirect(`${origin}${redirect}`);
+        return res.redirect(`${originURL}${redirect}`);
     });
-}
-
-const setCookies = (res, tokens) => {
-    const { accessToken, refreshToken, rememberToken } = tokens;
-    if (accessToken) res.cookie('access_token', accessToken, accessTokenAttr);
-    if (refreshToken) res.cookie('refresh_token', refreshToken, refreshTokenAttr);
-    if (rememberToken) res.cookie('remember_token', rememberToken, rememberTokenAttr);
 }
 
 const revokeSession = async (req, res) => {
@@ -53,14 +48,7 @@ const revokeSession = async (req, res) => {
     return res.redirect(`${originURL}/login`);
 }
 
-const clearAllTokens = (res) => {
-    res.clearCookie('access_token', accessTokenAttr);
-    res.clearCookie('refresh_token', refreshTokenAttr);
-    res.clearCookie('remember_token', rememberTokenAttr);
-}
-
 module.exports = {
-    loginHandler,
     revokeSession,
     refreshSession,
 }
