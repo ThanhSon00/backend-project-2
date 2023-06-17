@@ -4,7 +4,7 @@ const { StatusCodes } = require('http-status-codes');
 const validateLoginInput = async (req, res, next) => {
     const { email, password, credential } = req.body;
     if (credential) {
-        return next('route');
+        return next();
     }
     if (!email || !password) {
         return res.status(StatusCodes.BAD_REQUEST).send("Please fill both email and password");

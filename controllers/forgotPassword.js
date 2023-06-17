@@ -18,7 +18,7 @@ const sendMailResetPwd = async (req, res) => {
     const resetPwdForm = await renderFileAsync("./views/request-reset-password.ejs", { urlToken })
     await sendMail(recipient, resetPwdForm);
     await makeRequest(`/api/v1/users/${userID}`, 'PATCH', { lockToken: token });
-    res.cookie('notification', 'Password Reset Link has been sent to your email.', otherTokenAttr);
+    res.cookie('notification', 'Password Reset Mail has been sent to your email.', otherTokenAttr);
     return res.redirect(`${originURL}/login`);
 }
 
@@ -38,12 +38,12 @@ const sendMail = async (recipient, htmlData) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'phanson999999@gmail.com',
+            user: process.env.APP_USER,
             pass: process.env.APP_PASSWORD
         }
     })
     const mailOptions = {
-        from: 'phanson999999@gmail.com',
+        from: process.env.APP_USER,
         to: recipient,
         subject: "Chat Application: Reset Password",
         html: htmlData

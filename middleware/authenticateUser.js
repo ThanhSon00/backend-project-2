@@ -1,5 +1,4 @@
-const { makeRequest } = require('../setting/api');
-const originURL = `${process.env.PROTOCOL}://${process.env.DOMAIN}:${process.env.PORT}`;
+const { makeRequest, originURL } = require('../setting/api');
 
 const authenticateUser = async (req, res, next) => {
     const accessToken = req.cookies.access_token;
