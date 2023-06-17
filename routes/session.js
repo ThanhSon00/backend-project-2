@@ -5,7 +5,7 @@ const checkAccessToken = require('../middleware/checkAccessToken');
 const checkRefreshToken = require('../middleware/checkRefreshToken');
 const checkRememberToken = require('../middleware/checkRememberToken');
 const validateLoginInput = require('../middleware/validateLoginInput');
-const login = require('../middleware/login');
+const doLogin = require('../middleware/doLogin');
 
 const {
     updateSession,
@@ -20,8 +20,7 @@ router.route('/:accessToken')
     .delete(checkAccessToken, asyncWrapper(deleteSession));
 
 // POST
-router.route('/').post(validateLoginInput)
-router.route('/').post(login, asyncWrapper(createSession))
+router.route('/').post(validateLoginInput, doLogin, asyncWrapper(createSession))
 
 // PATCH 1
 router.route('/').patch(checkRefreshToken, checkRememberToken);
