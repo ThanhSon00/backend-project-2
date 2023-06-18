@@ -3,14 +3,17 @@ const domain = process.env.DOMAIN;
 const protocol = process.env.PROTOCOL;
 const port = process.env.PORT;
 const originURL = `${protocol}://${domain}:${port}`;
-
+const fs = require('fs');
+const https = require('https');
+const httpsAgent = new https.Agent({ ca: fs.readFileSync('C:/Users/son/AppData/Local/devcert/certificate-authority/certificate.cert') });
 const makeRequest = async (path, method, body, callback) => {
     let response, err;
     try {
         response = await axios({
             url: `${originURL}${path}`,
             method: method,
-            data: body
+            data: body,
+            httpsAgent,
         });
     } catch (error) {
         err = error;

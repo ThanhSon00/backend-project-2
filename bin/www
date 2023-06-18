@@ -3,10 +3,12 @@
 /**
  * Module dependencies.
  */
+const fs = require('fs');
 require('dotenv').config();
 var app = require('../app');
 var debug = require('debug')('backend-project-2:server');
-var http = require('http');
+// var http = require('http');
+const https = require('https');
 
 /**
  * Get port from environment and store in Express.
@@ -19,8 +21,11 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
-
+// var server = http.createServer(app);
+const server = https.createServer({
+  key: fs.readFileSync('./certs/tls.key'),
+  cert: fs.readFileSync('./certs/tls.cert')
+}, app);
 /**
  * Listen on provided port, on all network interfaces.
  */
