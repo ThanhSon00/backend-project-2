@@ -2,8 +2,8 @@ const validator = require('validator');
 const { StatusCodes } = require('http-status-codes');
 
 const validateLoginInput = async (req, res, next) => {
-    const { email, password, credential } = req.body;
-    if (credential) {
+    const { email, password, credential, selector, name } = req.body;
+    if (userLoginByGoogle(credential) || userLoginByFacebook(selector, name)) {
         return next();
     }
     if (!email || !password) {
@@ -15,4 +15,13 @@ const validateLoginInput = async (req, res, next) => {
     return next();
 }
 
+const userLoginByGoogle = (credential) => {
+    if (credential) return true;
+    return false;
+}
+
+const userLoginByFacebook = (name, selector) => {
+    if (name && selector) return true;
+    return false;
+}
 module.exports = validateLoginInput;

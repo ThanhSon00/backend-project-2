@@ -1,25 +1,28 @@
 const { StatusCodes } = require("http-status-codes")
-const { makeRequest } = require("../setting/api")
+const { makeRequest, originURL } = require("../setting/api")
 const bcrypt = require('bcryptjs');
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
 const doLogin = async (req, res, next) => {
-    const { email, password, credential } = req.body;
+    const { email, password, credential, name, selector } = req.body;
     let user;   
     if (email && password) {
         user = await normalLogin(email, password);
         if (!user) {
             return res.status(StatusCodes.UNAUTHORIZED).send('Email or password not correct');
         }
-        if (user.isGoogleUser) {
-            return res.status(StatusCodes.NOT_ACCEPTABLE).send('This email has been used for another account');
-        }
     }
-    else if (credential) {
+    if (credential) {
         user = await googleLogin(credential);
         if (!user) {
             return res.status(StatusCodes.NOT_ACCEPTABLE).send('This email has been used for another account');
+        }
+    }
+    if (name && selector) {
+        user = await facebookLogin(name, selector);
+        if (!user) {
+            return res.status(StatusCodes.BAD_REQUEST).send('Unexpected Error');
         }
     }
     req.body.user = user;
@@ -34,6 +37,7 @@ const normalLogin = async (email, password) => {
     });
     const match = await bcrypt.compare(password, user.password);
     if (!match) return;
+    if (user.isGoogleUser) return; 
     return user
 }
 
@@ -61,6 +65,20 @@ const verify = async (token) => {
     });
     const payload = ticket.getPayload();
     return payload;
+}
+
+const facebookLogin = async (name, selector) => {
+    let user;
+    try {
+        user = await makeRequest(`/api/v1/users?selector=${selector}`);
+    } catch (err) {
+        user = await makeRequest(`/api/v1/users`, 'POST', {
+            name,
+            selector,
+            isFacebookUser: true,
+        });
+    }
+    return user;
 }
 
 module.exports = doLogin;

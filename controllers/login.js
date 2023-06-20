@@ -10,13 +10,23 @@ const renderPage = async (req, res) => {
 }
 
 const loginHandler = async (req, res) => {
-    const { email, password, remember: rememberMe, credential } = req.body;
+    const { 
+        email, 
+        password, 
+        remember: rememberMe, 
+        credential,
+        name,
+        selector,
+    } = req.body;
+
     // Create and save session details to database
     makeRequest(`/api/v1/sessions`, 'POST', {
         email,
         password,
         rememberMe,
         credential,
+        name,
+        selector,
     }, (err, tokens) => {
         if (err) {
             if (err.response?.status === StatusCodes.UNAUTHORIZED || 

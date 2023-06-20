@@ -2,7 +2,7 @@ const User = require('../models/User');
 const { StatusCodes } = require('http-status-codes')
 const crypto = require('crypto');
 const validator = require('validator');
-const defaultFields = 'email password name avatar title token selector validator isGoogleUser lockToken';
+const defaultFields = 'email password name avatar title token selector validator isGoogleUser lockToken isFacebookUser';
 
 const getUsers = async (req, res) => {
     const filters = req.query;
@@ -21,16 +21,19 @@ const getUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
     const { name, email } = req.body;
+    const isFacebookUser = req.body.isFacebookUser || false;
     const isGoogleUser = req.body.isGoogleUser || false;
     const password = req.body.password || crypto.randomBytes(20).toString('hex');
     const avatar = req.body.avatar || "";
-    if (!name || !email) {
-        return res.status(StatusCodes.BAD_REQUEST).send("Not enough information");
-    }
-    if (!validator.default.isEmail(email)) {
-        return res.status(StatusCodes.BAD_REQUEST).send("Email is not correct");
-    } 
-    const user = await User.create({
+    const selector = req.body.selector?.toString() || "";
+    // if (!name || !email) {
+    //     return res.status(StatusCodes.BAD_REQUEST).send("Not enough information");
+    // }
+    // if (!validator.default.isEmail(email)) {
+    //     return res.status(StatusCodes.BAD_REQUEST).send("Email is not correct");
+    // } 
+    
+    const userData = {
         groups: [],
         notifications: [],
         name,
@@ -38,12 +41,17 @@ const createUser = async (req, res) => {
         password,
         email,
         isGoogleUser,
+        isFacebookUser,
         title: "",
         token: "",
-        selector: "",
+        selector,
         validator: "",
         lockToken: "",
-    });
+    };
+
+     // Avoid violating unique constraint when email is null in db
+    if (!userData.email) delete userData.email;
+    const user = await User.create(userData);
 
     return res.status(StatusCodes.CREATED).json(user);
 }

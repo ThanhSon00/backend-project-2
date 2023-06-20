@@ -1,100 +1,121 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/fonts/icomoon/style.css">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/fonts/icomoon/style.css">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    
-    <!-- Style -->
-    <link rel="stylesheet" href="/css/login-style.css">
+  <link rel="stylesheet" href="/css/owl.carousel.min.css">
 
-    <title>Login to application</title>
-  </head>
-  <body>
-  
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-  
-    <div class="content">
-      <div class="container">
-        <div class="row justify-content-center">
-          <!-- <div class="col-md-6 order-md-2">
+  <!-- Style -->
+  <link rel="stylesheet" href="/css/login-style.css">
+
+  <title>Login to application</title>
+
+
+</head>
+
+<body>
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0&appId=650917843607824&autoLogAppEvents=1" nonce="7xrfUMGV"></script>
+
+
+  <div class="content">
+    <div class="container">
+      <div class="row justify-content-center">
+        <!-- <div class="col-md-6 order-md-2">
             <img src="images/undraw_file_sync_ot38.svg" alt="Image" class="img-fluid">
           </div> -->
-          <div class="col-md-6 contents">
-            <div class="row justify-content-center">
-              <div class="col-md-12" style="
+        <div class="col-md-6 contents">
+          <div class="row justify-content-center">
+            <div class="col-md-12" style="
   ">
-                <div class="form-block">
-                    <div class="mb-4">
-                    <h3>Sign In to <strong>Chat Application</strong></h3>
-                    <p class="mb-4"></p>
-                  </div>
-                  <% if (locals.message) { %> 
-                    <h5 class="error-message"> <%= message %> </h1>
-                  <% } %>
-                  <form action="/authentication" method="post">
-                    <div class="form-group first">
-                      <label for="email">Email</label>
-                      <input type="text" class="form-control" name="email" id="email">
-  
-                    </div>
-                    <div class="form-group last mb-4">
-                      <label for="password">Password</label>
-                      <input type="password" class="form-control" name="password" id="password">
-                    </div>
-                    
-                    <div class="d-flex mb-5 align-items-center">
-                      <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
-                        <input type="checkbox" name="remember" checked="checked">
-                        <div class="control__indicator"></div>
-                      </label>
-                      <span class="ml-auto"><a href="http://localhost:8080/forgot-password" class="forgot-pass" style="
-      color: #aaa9a9;
-  ">Forgot Password</a></span> 
-                    </div>
-  
-                    <input type="submit" value="Log In" class="btn btn-pill text-white btn-block btn-primary">
-                    
-  
-                    <span class="d-block text-center my-4 text-muted"> or sign in with</span>
-                    
-                    <div class="social-login text-center">
-                      <a href="http://localhost:8080/login#" class="facebook">
-                        <span class="icon-facebook mr-3"></span> 
-                      </a>
-                      <a href="http://localhost:8080/login#" class="twitter">
-                        <span class="icon-twitter mr-3"></span> 
-                      </a>
-                      <a>
-                        <div id="g_id_onload" data-client_id="525865511033-fbg0hc435gdok777v1audt63n7hfjhdb.apps.googleusercontent.com" data-context="signin" data-ux_mode="redirect" data-login_uri="http://localhost:8080/authentication" data-auto_prompt="false">
-                        </div>
-                        
-                        <div class="g_id_signin" data-type="icon" data-shape="circle" data-theme="filled_blue" data-text="signin_with" data-size="large"></div>
-                      </a>
-                    </div>
-                  </form>
+              <div class="form-block">
+                <div class="mb-4">
+                  <h3>Sign In to <strong>Chat Application</strong></h3>
+                  <p class="mb-4"></p>
                 </div>
+                <% if (locals.message) { %>
+                  <h5 class="error-message">
+                    <%= message %>
+                  </h5>
+                  <% } %>
+                    <% if (locals.notification) { %>
+                      <h5 class="notification">
+                        <%= notification %>
+                      </h5>
+                      <% } %>
+                        <form action="/login" method="post">
+                          <div class="form-group first">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" name="email" id="email">
+
+                          </div>
+                          <div class="form-group last mb-4">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" id="password">
+                          </div>
+
+                          <div class="d-flex mb-5 align-items-center">
+                            <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
+                              <input type="checkbox" name="remember" checked="checked">
+                              <div class="control__indicator"></div>
+                            </label>
+                            <span class="ml-auto"><a href="/forgot-password" class="forgot-pass"
+                                style="color: #aaa9a9;">Forgot Password</a></span>
+                          </div>
+
+                          <input type="submit" value="Log In" class="btn btn-pill text-white btn-block btn-primary">
+
+
+                          <span class="d-block text-center my-4 text-muted"> or sign in with
+                          </span>
+                          <div class="social-login">
+                            <div id="g_id_onload"
+                              data-client_id="269471794836-509hrmh7esmq2o36g6jqbn0c6nms02ug.apps.googleusercontent.com"
+                              data-context="signin"
+                              data-ux_mode="redirect"
+                              data-login_uri="https://localhost:8080/login"
+                              data-auto_prompt="false">
+                            </div>
+                            
+                            <div class="g_id_signin"
+                              data-type="standard"
+                              data-shape="circle"
+                              data-theme="outline"
+                              data-text="continue_with"
+                              data-size="medium"
+                              data-logo_alignment="left"
+                              data-width="300"
+                              data-locale="en">
+                            </div>
+                            <br>
+                            <div class="facebook-login-button">
+                              <div class="fb-login-button" data-width="300" data-size="medium" data-button-type="continue_with" data-layout="rounded" data-auto-logout-link="false" data-use-continue-as="false" 	
+                              data-onlogin=facebookLogin()></div>
+                            </div>
+                          </div>
+                        </form>
               </div>
             </div>
-            
           </div>
-          
         </div>
       </div>
     </div>
+  </div>
+  
+  <script src="https://accounts.google.com/gsi/client"></script>
+  <script src="/js/jquery-3.3.1.min.js"></script>
+  <script src="/js/popper.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/main.js"></script>
+</body>
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/main.js"></script>
-  </body>
 </html>

@@ -231,3 +231,11 @@ h2 {
 h5.error-message {
   color: red;
 }
+
+h5.notification {
+  color: green;
+}
+
+.social-login {
+  text-align: -webkit-center;
+}
