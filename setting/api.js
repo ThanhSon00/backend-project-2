@@ -7,12 +7,16 @@ const fs = require('fs');
 const https = require('https');
 const httpsAgent = new https.Agent({ ca: fs.readFileSync('C:/Users/son/AppData/Local/devcert/certificate-authority/certificate.cert') });
 const makeRequest = async (path, method, body, callback) => {
+    if (!body) body = {};
     let response, err;
     try {
         response = await axios({
             url: `${originURL}${path}`,
             method: method,
-            data: body,
+            data: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            },
             httpsAgent,
         });
     } catch (error) {
