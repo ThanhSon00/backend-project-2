@@ -35,24 +35,23 @@
           </div> -->
         <div class="col-md-6 contents">
           <div class="row justify-content-center">
-            <div class="col-md-12" style="
-  ">
+            <div class="col-md-12">
               <div class="form-block">
                 <div class="mb-4">
                   <h3>Sign In to <strong>Chat Application</strong></h3>
                   <p class="mb-4"></p>
                 </div>
-                <% if (locals.message) { %>
                   <h5 class="error-message">
+                    <% if (locals.message) { %>
                     <%= message %>
+                    <% } %>
                   </h5>
-                  <% } %>
+                  <h5 class="notification">
                     <% if (locals.notification) { %>
-                      <h5 class="notification">
-                        <%= notification %>
-                      </h5>
-                      <% } %>
-                        <form action="/login" method="post">
+                    <%= notification %>
+                    <% } %>
+                  </h5>
+                        <form action="/login" method="post" class="login">
                           <div class="form-group first">
                             <label for="email">Email</label>
                             <input type="text" class="form-control" name="email" id="email">
@@ -116,6 +115,7 @@
   <script src="/js/popper.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
   <script src="/js/main.js"></script>
+  <script src="/js/login.js"></script>
 </body>
 
 </html>
