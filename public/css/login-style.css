@@ -78,7 +78,7 @@ h2 {
     .content .contents .form-group.focus, .content .bg .form-group.focus {
       background: #fff; }
     .content .contents .form-group.field--not-empty label, .content .bg .form-group.field--not-empty label {
-      margin-top: -20px; }
+      margin-top: -25px; }
   .content .contents .form-control, .content .bg .form-control {
     border: none;
     padding: 0;
@@ -152,7 +152,7 @@ h2 {
   .control .caption {
     position: relative;
     top: .2rem;
-    color: #888; }
+    color: #ffffff; }
 
 .control input {
   position: absolute;
@@ -230,10 +230,12 @@ h2 {
 
 h5.error-message {
   color: red;
+  text-align: center;
 }
 
 h5.notification {
-  color: green;
+  color: #15e015;
+  text-align: center;
 }
 
 .social-login {
