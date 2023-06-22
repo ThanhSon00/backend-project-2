@@ -1,14 +1,13 @@
-const { otherTokenAttr } = require("../setting/attributes");
+const { StatusCodes } = require("http-status-codes");
 
 const validate2Password = async (req, res, next) => {
     const { newPassword, repeatPassword } = req.body;
+    console.log(newPassword, repeatPassword);
     if (!newPassword || !repeatPassword) {
-        res.cookie('message', 'Please fill both passwords', otherTokenAttr);
-        return res.redirect('back');
+        return res.status(StatusCodes.BAD_REQUEST).send('Please fill both passwords');
     }
     if (newPassword != repeatPassword) {
-        res.cookie('message', "Passwords are not matched", otherTokenAttr);
-        return res.redirect('back');
+        return res.status(StatusCodes.BAD_REQUEST).send('Passwords are not matched');
     }
     return next();
 }

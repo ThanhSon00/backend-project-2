@@ -10,35 +10,32 @@ const renderPage = async (req, res) => {
 }
 
 const loginHandler = async (req, res) => {
-    const { 
-        email, 
-        password, 
-        remember: rememberMe, 
-        credential,
-        name,
-        selector,
-    } = req.body;
-
+    const loginData = {
+        email: req.body.email,
+        password: req.body.password,
+        rememberMe: req.body.rememberMe,
+        credential: req.body.credential,
+        name: req.body.name,
+        selector: req.body.selector,
+    } 
     // Create and save session details to database
-    makeRequest(`/api/v1/sessions`, 'POST', {
-        email,
-        password,
-        rememberMe,
-        credential,
-        name,
-        selector,
-    }, (err, tokens) => {
+    makeRequest(`/api/v1/sessions`, 'POST', loginData, (err, tokens) => {
         if (err) {
-            if (err.response?.status === StatusCodes.UNAUTHORIZED || 
-                err.response?.status === StatusCodes.BAD_REQUEST ||
-                err.response?.status === StatusCodes.NOT_ACCEPTABLE) {
-                res.cookie('message', err.response.data, otherTokenAttr);
-            }
-            return res.redirect(`${originURL}/login`);
+            const message = err.response?.data || "";
+            const errorStatus = err.response?.status || StatusCodes.INTERNAL_SERVER_ERROR;
+            return res.status(errorStatus).send(message);
         }
         setTokens(res, tokens);
-        return res.redirect(`${originURL}/home`);
+        if (userLoginByGoogle()) return res.redirect(`${originURL}/home`);
+        return res.status(StatusCodes.OK).send();
     })
+    
+    const userLoginByGoogle = () => {
+        if (loginData.credential) {
+            return true;
+        }
+        return false;
+    }      
 }
 
 const setTokens = (res, tokens) => {

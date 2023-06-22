@@ -5,17 +5,14 @@ const { StatusCodes } = require('http-status-codes');
 const validateEmail = async (req, res, next) => {
     const { email } = req.body;
     if (!email) {
-        res.cookie('message', 'Please fill out your email');
-        return res.redirect('back');
+        return res.status(StatusCodes.BAD_REQUEST).send('Please fill out your email');
     }
     if (!validator.default.isEmail(email)) {
-        res.cookie('message', 'Email not valid');
-        return res.redirect('back');
+        return res.status(StatusCodes.BAD_REQUEST).send('Email not valid');
     }
     makeRequest(`/api/v1/users?email=${email}`, 'GET', null, (err, user) => {
         if (err?.response?.status === StatusCodes.NOT_FOUND || user.isGoogleUser) {
-            res.cookie('message', 'Email not found');
-            return res.redirect('back');
+            return res.status(StatusCodes.NOT_FOUND).send('Email not found');
         }
         req.body._id = user._id;
         req.body.name = user.email;

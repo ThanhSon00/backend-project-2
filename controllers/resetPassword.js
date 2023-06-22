@@ -1,13 +1,10 @@
 const { StatusCodes } = require("http-status-codes");
-const { otherTokenAttr } = require("../setting/attributes");
-const { originURL, makeRequest } = require("../setting/api");
+const { makeRequest } = require('../setting/api');
 
 const renderPage = async (req, res) => {
     const { token } = req.params;
-    const { message } = req.cookies;
     const { user } = req.body;
-    const body = { message, userID: user._id, token };
-    res.clearCookie('message', otherTokenAttr);
+    const body = { userID: user._id, token };
     return res.render('reset-password', body);
 }
 
@@ -18,8 +15,7 @@ const resetPassword = async (req, res) => {
         lockToken: null, 
     };
     await makeRequest(`/api/v1/users/${userID}`, 'PATCH', body);
-    res.cookie('notification', "You have changed password successfully", otherTokenAttr);
-    return res.redirect(`${originURL}/login`);
+    return res.status(StatusCodes.OK).send('You have changed password successfully');
 }
 
 module.exports = {
