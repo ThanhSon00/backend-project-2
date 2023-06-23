@@ -1,5 +1,11 @@
+const { originURL } = require("../setting/api");
+
 const renderPage = async (req, res) => {
-    return res.render('home');
+    const { user } = req.body;
+    return res.render('home', { 
+        user,
+        originURL
+    });
 }
 
 module.exports = {
