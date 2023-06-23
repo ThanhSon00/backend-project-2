@@ -16,7 +16,6 @@ const forgotPwdRoutes = require('./routes/forgotPassword');
 const resetPwdRoutes = require('./routes/resetPassword');
 
 // Middleware
-const authenticateUser = require('./middleware/authenticateUser');
 const validateLockToken = require('./middleware/validateLockToken');
 
 const app = express();
@@ -34,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => { res.redirect('/login') });
 app.use('/login', loginRoutes);
 app.use('/authentication', authenticationRoutes);
-app.use('/home', authenticateUser, homeRoutes);
+app.use('/home', homeRoutes);
 app.use('/forgot-password', forgotPwdRoutes);
 app.use('/reset-password/:token', validateLockToken, resetPwdRoutes);
 
@@ -53,7 +52,7 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-  console.log(err);
+
   // render the error page
   res.status(err.status || 500);
   res.render('error', { originURL });
