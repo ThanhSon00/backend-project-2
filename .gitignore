@@ -1,2 +1,8 @@
 node_modules/
 .env
+package-lock.json
+tests/
+ERD chat app.drawio
+NoSQL DB.txt
+Project Backend 2.docx
+certs/
