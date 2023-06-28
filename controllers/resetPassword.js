@@ -1,5 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
-const { makeRequest } = require('../setting/api');
+const UserModel = require('../models/User');
 
 const renderPage = async (req, res) => {
     const { token } = req.params;
@@ -10,11 +10,11 @@ const renderPage = async (req, res) => {
 
 const resetPassword = async (req, res) => {
     const { newPassword, userID } = req.body;
-    const body = { 
+    const userDataToUpdate = { 
         password: newPassword,
         lockToken: null, 
     };
-    await makeRequest(`/api/v1/users/${userID}`, 'PATCH', body);
+    await UserModel.updateUser(userID, userDataToUpdate);
     return res.status(StatusCodes.OK).send('You have changed password successfully');
 }
 
