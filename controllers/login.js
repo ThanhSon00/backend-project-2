@@ -1,44 +1,25 @@
-const { accessTokenAttr, refreshTokenAttr, rememberTokenAttr, otherTokenAttr } = require('../setting/attributes')
-const { makeRequest, originURL } = require('../setting/api')
+const { accessTokenAttr, refreshTokenAttr, rememberTokenAttr } = require('../setting/attributes')
+const { originURL } = require('../setting/api')
 const { StatusCodes } = require('http-status-codes');
+const AuthService = require('../services/Authentication');
+const SessionService = require('../services/Session');
 
 const renderPage = async (req, res) => {
-    const { message, notification } = req.cookies;
-    res.clearCookie('message', otherTokenAttr);
-    res.clearCookie('notification', otherTokenAttr);
-    return res.render('login', { message, notification });
+    return res.render('login');
 }
 
-const loginHandler = async (req, res) => {
-    const loginData = {
-        email: req.body.email,
-        password: req.body.password,
-        rememberMe: req.body.rememberMe,
-        credential: req.body.credential,
-        name: req.body.name,
-        selector: req.body.selector,
-    } 
-    // Create and save session details to database
-    makeRequest(`/api/v1/sessions`, 'POST', loginData, (err, tokens) => {
-        if (err) {
-            const message = err.response?.data || "";
-            const errorStatus = err.response?.status || StatusCodes.INTERNAL_SERVER_ERROR;
-            return res.status(errorStatus).send(message);
-        }
-        setTokens(res, tokens);
-        if (userLoginByGoogle()) return res.redirect(`${originURL}/home`);
-        return res.status(StatusCodes.OK).send();
-    })
-    
-    const userLoginByGoogle = () => {
-        if (loginData.credential) {
-            return true;
-        }
-        return false;
-    }      
+const doLogin = async (req, res) => {
+    const { rememberMe } = req.body;
+    const user = await AuthService.doLogin(req);
+    if (!user) return res.status(StatusCodes.BAD_REQUEST).send();
+    const tokens = await SessionService.createSession(user, rememberMe);
+
+    setCookies(res, tokens);
+    if (user.isGoogleUser) return res.redirect(`${originURL}/home`);
+    return res.status(StatusCodes.OK).send();
 }
 
-const setTokens = (res, tokens) => {
+const setCookies = (res, tokens) => {
     const { accessToken, refreshToken, rememberToken } = tokens;
     if (accessToken) res.cookie('access_token', accessToken, accessTokenAttr);
     if (refreshToken) res.cookie('refresh_token', refreshToken, refreshTokenAttr);
@@ -47,5 +28,5 @@ const setTokens = (res, tokens) => {
 
 module.exports = {
     renderPage,
-    loginHandler,
+    doLogin,
 }

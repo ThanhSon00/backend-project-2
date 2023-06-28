@@ -1,38 +1,33 @@
-const { otherTokenAttr } = require("../setting/attributes");
 const nodemailer = require('nodemailer');
-const { originURL, makeRequest } = require('../setting/api')
+const { originURL } = require('../setting/api')
 const { v4: uuidv4 } = require('uuid');
-const ejs = require('ejs');
 const { StatusCodes } = require("http-status-codes");
+const FormService = require('../services/form');
+const UserModel = require('../models/User');
 
 const renderPage = async (req, res) => {
-    const { message } = req.cookies;
-    res.clearCookie('message', otherTokenAttr);
-    return res.render('forgot-password', { message });
+    return res.render('forgot-password');
 }
 
 const sendMailResetPwd = async (req, res) => {
-    const { email: recipient, _id: userID } = req.body;
-    const currentDate = new Date();
-    const token = `${uuidv4()}-${currentDate.getTime()}`
-    const tokenURL = `${originURL}/reset-password/${token}`;
-    const resetPwdForm = await renderFileAsync("./views/request-reset-password.ejs", { tokenURL })
+    const { email: recipient, _id: userID, user } = req.body;
+    if (user.isGoogleUser) return res.status(StatusCodes.NOT_ACCEPTABLE).send();
+    const tokenURL = generateTokenURL();
+    const resetPwdForm = await FormService.createForm(tokenURL.url);
+    await UserModel.updateUser(userID, { lockToken: tokenURL.token });
     await sendMail(recipient, resetPwdForm);
-    await makeRequest(`/api/v1/users/${userID}`, 'PATCH', { lockToken: token });
     const message = `Password Reset Mail has been sent to ${recipient}. Please check your email.`;
     return res.status(StatusCodes.OK).send(message);
 }
 
-const renderFileAsync = async (filePath, data) => {
-    return new Promise((resolve, reject) => {
-        ejs.renderFile(filePath, data, (error, renderedHtml) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(renderedHtml);
-            }
-        });
-    });
+const generateTokenURL = () => {
+    const currentDate = new Date();
+    const token = `${uuidv4()}-${currentDate.getTime()}`
+    const tokenURL = `${originURL}/reset-password/${token}`;
+    return {
+        url: tokenURL,
+        token
+    }
 }
 
 const sendMail = async (recipient, htmlData) => {
