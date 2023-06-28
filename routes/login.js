@@ -1,6 +1,7 @@
 const express = require('express');
 const asyncWrapper = require('../middleware/asyncWrapper');
 const router = express.Router();
+const { validateLoginInput } = require('../middleware/validator');
 const checkLogged = require('../middleware/checkLogged');
 
 const { 
@@ -10,6 +11,6 @@ const {
 
 router.route('/')
     .get(checkLogged, renderPage)
-    .post(asyncWrapper(loginHandler));
+    .post(validateLoginInput, asyncWrapper(loginHandler));
 
 module.exports = router;

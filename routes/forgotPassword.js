@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const validateEmail = require('../middleware/validateEmail');
 const checkLogged = require('../middleware/checkLogged');
+const { validateEmail } = require('../middleware/validator');
 
 const {
     renderPage,

@@ -16,7 +16,7 @@ const forgotPwdRoutes = require('./routes/forgotPassword');
 const resetPwdRoutes = require('./routes/resetPassword');
 
 // Middleware
-const validateLockToken = require('./middleware/validateLockToken');
+const { validateLockToken } = require('./middleware/validator');
 
 const app = express();
 
