@@ -1,10 +1,10 @@
 const { StatusCodes } = require("http-status-codes")
-const { makeRequest } = require("../setting/api")
-const getAccessPayload = require('../modules/getAccessPayload');
-const getRefreshPayload = require('../modules/getRefreshPayload');
-const getRememberPayload = require('../modules/getRememberPayload');
-const filterObject = require('../modules/filterObject');
+const getAccessPayload = require('../../modules/getAccessPayload');
+const getRefreshPayload = require('../../modules/getRefreshPayload');
+const getRememberPayload = require('../../modules/getRememberPayload');
+const filterObject = require('../../modules/filterObject');
 const jwt = require('jsonwebtoken');
+const UserModel = require("../../models/User");
 
 const getSession = async (req, res) => {
     const { user } = req.body;
@@ -22,29 +22,25 @@ const updateSession = async (req, res) => {
     // If user login with "remember me" button checked
     if (rememberToken) {
         user.rememberMe = true;
-        const tokens = await generateTokens(user);
+        const tokens = await createAndSaveTokens(user);
         return res.status(StatusCodes.OK).json(tokens);    
     }
 }
 
 const deleteSession = async (req, res) => {
     const { user } = req.body; 
-    await makeRequest(`/api/v1/users/${user._id}`, 'PATCH', {
-        token: null,
-        validator: null,
-    });
+    await revokeTokens(user);
     return res.status(StatusCodes.OK).send();
 }
 
 const createSession = async (req, res) => {
     const { user, rememberMe } = req.body;
-    user.rememberMe = rememberMe;
-    const tokens = await generateTokens(user);
+    const tokens = await createAndSaveTokens(user, rememberMe);
     return res.status(StatusCodes.CREATED).json(tokens);
 }
 
 
-const generateTokens = async (user) => {
+const createAndSaveTokens = async (user, rememberMe) => {
     const filteredUser = filterObject(user, ['_id', 'email', 'name', 'avatar', 'title', 'selector']);
     const accessPayload = getAccessPayload(filteredUser);
     const accessToken = jwt.sign(accessPayload, process.env.ACCESS_SECRET);
@@ -55,12 +51,22 @@ const generateTokens = async (user) => {
     const rememberPayload = getRememberPayload(filteredUser);
     const rememberToken = jwt.sign(rememberPayload, process.env.REMEMBER_SECRET);
 
-    await makeRequest(`/api/v1/users/${filteredUser._id}`, 'PATCH', {
+    const userID = filteredUser._id;
+    await UserModel.updateUser(userID, {
         token: refreshPayload.jti,
         validator: rememberPayload.validator,
     })
-    if (user.rememberMe) return { accessToken, refreshToken, rememberToken }
-    return { accessToken, refreshToken }
+
+    const tokens = { accessToken, refreshToken, rememberToken };
+    if (!rememberMe) delete tokens.rememberToken; 
+    return tokens;
+}
+
+const revokeTokens = async (user) => {
+    UserModel.updateUser(user._id, {
+        token: null,
+        validator: null,    
+    });
 }
 
 module.exports = {

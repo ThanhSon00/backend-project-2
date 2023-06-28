@@ -9,8 +9,9 @@ const { originURL } = require('./setting/api');
 // Routes
 const authenticationRoutes = require('./routes/authentication');
 const userRoutes = require('./routes/api/user');
+const formRoutes = require('./routes/api/form');
+const sessionRoutes = require('./routes/api/session');
 const homeRoutes = require('./routes/home');
-const sessionRoutes = require('./routes/session');
 const loginRoutes = require('./routes/login');
 const forgotPwdRoutes = require('./routes/forgotPassword');
 const resetPwdRoutes = require('./routes/resetPassword');
@@ -40,6 +41,7 @@ app.use('/reset-password/:token', validateLockToken, resetPwdRoutes);
 // Rest api
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/sessions', sessionRoutes);
+app.use('/api/v1/forms', formRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
