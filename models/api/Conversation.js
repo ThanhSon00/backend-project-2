@@ -1,4 +1,4 @@
-const mongoose = require('../database/connect');
+const mongoose = require('../../database/connect');
 
 const conversationSchema = new mongoose.Schema({
     name: String,

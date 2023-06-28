@@ -1,7 +1,7 @@
-const User = require('../models/User');
+
+const User = require('../../models/api/User');
 const { StatusCodes } = require('http-status-codes')
 const crypto = require('crypto');
-const validator = require('validator');
 const defaultFields = 'email password name avatar title token selector validator isGoogleUser lockToken isFacebookUser';
 
 const getUsers = async (req, res) => {

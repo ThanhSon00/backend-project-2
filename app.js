@@ -8,7 +8,7 @@ const { originURL } = require('./setting/api');
 
 // Routes
 const authenticationRoutes = require('./routes/authentication');
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/api/user');
 const homeRoutes = require('./routes/home');
 const sessionRoutes = require('./routes/session');
 const loginRoutes = require('./routes/login');

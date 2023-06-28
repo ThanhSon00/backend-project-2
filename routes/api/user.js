@@ -1,4 +1,4 @@
-const asyncWrapper = require('../middleware/asyncWrapper');
+const asyncWrapper = require('../../middleware/asyncWrapper');
 const express = require('express');
 const router = express.Router();
 
@@ -7,7 +7,7 @@ const {
     createUser,
     getUser,
     updateUser
-} = require('../controllers/user');
+} = require('../../controllers/api/user');
 
 router.route('/:id')
     .get(asyncWrapper(getUser))

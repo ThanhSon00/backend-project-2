@@ -1,4 +1,4 @@
-const mongoose = require('../database/connect');
+const mongoose = require('../../database/connect');
 
 const chatLineSchema = new mongoose.Schema({
     description: String,

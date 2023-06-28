@@ -1,4 +1,4 @@
-const mongoose = require('../database/connect');
+const mongoose = require('../../database/connect');
 
 const notificationSchema = new mongoose.Schema({
     description: String,
