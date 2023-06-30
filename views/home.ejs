@@ -2209,7 +2209,7 @@
                             <div class="row g-0">
                                 
                                 <div class="col">
-                                    <input type="text" class="form-control form-control-lg bg-light border-light" placeholder="Enter Message...">
+                                    <input type="text" id="message-input-box" class="form-control form-control-lg bg-light border-light" placeholder="Enter Message...">
                                 </div>
                                 <div class="col-auto">
                                     <div class="chat-input-links ms-md-2 me-md-0">
@@ -2225,7 +2225,12 @@
                                                 </button>
                                             </li>
                                             <li class="list-inline-item">
-                                                <button type="submit" class="btn btn-primary font-size-16 btn-lg chat-send waves-effect waves-light">
+                                                <button type="submit" 
+                                                data-sender-id="<%= user._id %>" 
+                                                data-receiver-id="<%= receiver._id %>"
+                                                data-sender-name="<%=user.name %>" 
+                                                data-sender-avatar="<%= user.avatar %>" 
+                                                class="btn btn-primary font-size-16 btn-lg chat-send waves-effect waves-light">
                                                     <i class="ri-send-plane-2-fill"></i>
                                                 </button>
                                             </li>
@@ -2548,6 +2553,8 @@
         <!-- end  layout wrapper -->
 
         <!-- JAVASCRIPT -->
+        <script src="/libs/ejs/ejs.js"></script>
+        <script src="/libs/ejs/ejs.min.js"></script>
         <script src="/libs/jquery/jquery.min.js"></script>
         <script src="/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="/libs/simplebar/simplebar.min.js"></script>
@@ -2562,8 +2569,9 @@
         <!-- page init -->
         <script src="/js/pages/index.init.js"></script>
 
-        <script src="/js/app.js"></script>
-
+        <script src="/js/views/user-chat-content.js"></script>
+        <script src="/js/controllers/home.js"></script>
+        <script src="/js/views/home.js"></script>
     </body>
 
 <!-- Mirrored from themesbrand.com/chatvia/layouts/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 May 2021 20:24:56 GMT -->
