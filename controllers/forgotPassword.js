@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const { originURL } = require('../setting/api')
 const { v4: uuidv4 } = require('uuid');
 const { StatusCodes } = require("http-status-codes");
-const FormService = require('../services/form');
+const FormService = require('../services/Form');
 const UserModel = require('../models/User');
 
 const renderPage = async (req, res) => {
