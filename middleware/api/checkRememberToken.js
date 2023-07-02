@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
-const hash = require('../modules/hash');
-const UserModel = require('../models/User');
+const hash = require('../../modules/hash');
+const UserModel = require('../../models/User');
 
 const checkRememberToken = async (req, res, next) => {
     const { rememberToken } = req.body;
