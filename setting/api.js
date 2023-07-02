@@ -5,20 +5,22 @@ const port = process.env.PORT;
 const originURL = `${protocol}://${domain}:${port}`;
 const fs = require('fs');
 const https = require('https');
-const httpsAgent = new https.Agent({ ca: fs.readFileSync('C:/Users/son/AppData/Local/devcert/certificate-authority/certificate.cert') });
+
 const makeRequest = async (path, method, body, callback) => {
     if (!body) body = {};
     let response, err;
+    const requestOptions = {
+        url: `${originURL}${path}`,
+        method: method,
+        data: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    if (process.env.ENV === "development") 
+    requestOptions.httpsAgent = new https.Agent({ ca: fs.readFileSync('C:/Users/son/AppData/Local/devcert/certificate-authority/certificate.cert') });
     try {
-        response = await axios({
-            url: `${originURL}${path}`,
-            method: method,
-            data: JSON.stringify(body),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            httpsAgent,
-        });
+        response = await axios(requestOptions);
     } catch (error) {
         err = error;
     } finally {
