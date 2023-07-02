@@ -22,7 +22,7 @@ const checkRefreshToken = async (req, res, next) => {
             return res.status(StatusCodes.UNAUTHORIZED).send("Refresh token not valid");
         }
         req.body.user = dbUser;
-        return next();
+        return next('route');
     })     
 }
 

@@ -17,6 +17,8 @@ router.route('/:accessToken')
 
 router.route('/')
     .post(createSession)
-    .patch(checkRefreshToken, checkRememberToken, updateSession);
+    .patch(checkRefreshToken, checkRememberToken)
+    
+router.route('/').patch(updateSession);
 
 module.exports = router;
