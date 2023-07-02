@@ -1,5 +1,3 @@
-const originURL = "https://localhost:8080"
-
 const facebookLogin = () => {
 	FB.api('/me', (response) => {
 		fetch(`${originURL}/login`, {
@@ -12,6 +10,7 @@ const facebookLogin = () => {
 				selector: response.id,
 			})
 		}).then(() => {
+			const originURL = window.location.origin;
 			window.location.replace(`${originURL}/home`);
 		}).catch((error) => {
 			console.log(error);
@@ -19,12 +18,12 @@ const facebookLogin = () => {
 	});
 }
 
-
 const normalLogin = (event) => {
 	event.preventDefault();
 	const email = document.getElementById('email').value;
 	const password = document.getElementById('password').value;
 	const rememberMe = document.querySelector('.control.control--checkbox.mb-0 input').checked;
+	const originURL = window.location.origin;
 
 	fetch(`${originURL}/login`, {
 		method: 'POST',

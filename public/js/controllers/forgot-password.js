@@ -1,8 +1,7 @@
-const originURL = "https://localhost:8080"
-
 const sendRequestToResetPassword = (event) => {
 	event.preventDefault();
 	const email = document.getElementById('email').value;
+	const originURL = window.location.origin;
 	fetch(`${originURL}/forgot-password`, {
 		method: 'POST',
 		headers: {

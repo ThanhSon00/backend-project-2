@@ -7,7 +7,7 @@ const fs = require('fs');
 require('dotenv').config();
 var app = require('../app');
 var debug = require('debug')('backend-project-2:server');
-// var http = require('http');
+const http = require('http');
 const https = require('https');
 
 /**
@@ -20,12 +20,17 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
+let server;
 
-// var server = http.createServer(app);
-const server = https.createServer({
-  key: fs.readFileSync('./certs/tls.key'),
-  cert: fs.readFileSync('./certs/tls.cert')
-}, app);
+if (process.env.ENV === "production") {
+  server = http.createServer(app);
+}
+else if (process.env.ENV === "development") {
+  server = https.createServer({
+    key: fs.readFileSync('./certs/tls.key'),
+    cert: fs.readFileSync('./certs/tls.cert')
+  }, app);
+}
 /**
  * Listen on provided port, on all network interfaces.
  */

@@ -1,4 +1,3 @@
-const originURL = 'https://localhost:8080'
 
 const resetPassword = (event) => {
     event.preventDefault();
@@ -24,6 +23,7 @@ const resetPassword = (event) => {
             errorBox.innerText = "";
             notifyBox.innerText = message + '\n' + "You will be redirected to login page in 5s";
             setTimeout(() => {
+                const originURL = window.location.origin;
                 window.location.replace(`${originURL}/login`)
             }, 5000)
         }
