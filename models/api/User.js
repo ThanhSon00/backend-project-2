@@ -1,4 +1,4 @@
-const mongoose = require('../database/connect');
+const mongoose = require('../../database/connect');
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto');
 
@@ -8,8 +8,7 @@ const userSchema = new mongoose.Schema({
   title: String,
   password: String,
   email: { type: String, unique: true, sparse: true },
-  groups: Array,
-  notifications: Array,
+  conversation: Array,
   token: String,
   selector: String,
   validator: String,
@@ -49,5 +48,4 @@ userSchema.pre('findOneAndUpdate', async function (next) {
 });
 
 const User = mongoose.model('user', userSchema);
-
 module.exports = User;
