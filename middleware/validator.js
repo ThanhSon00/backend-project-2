@@ -54,6 +54,7 @@ const validateLockToken = async (req, res, next) => {
 }
 
 const validateLoginInput = async (req, res, next) => {
+    console.log(req.ip);
     const { email, password, credential, selector, name } = req.body;
     if (userLoginByGoogle() || userLoginByFacebook()) {
         return next();
