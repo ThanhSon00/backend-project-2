@@ -1,12 +1,20 @@
 const querystring = require('querystring');
 const { makeRequest } = require('../setting/api');
-class UserModel {   
+const { StatusCodes } = require('http-status-codes');
+class UserModel {
     static getUser(userID) {
         return makeRequest(`/api/v1/users/${userID}`, 'GET')
     }
-    static getUsers(queryData) {
-        const queryURL = querystring.stringify(queryData);
-        return makeRequest(`/api/v1/users?${queryURL}`, 'GET');
+    static async getUsers(queryData) {
+        try {
+            const queryURL = querystring.stringify(queryData);
+            const users = await makeRequest(`/api/v1/users?${queryURL}`, 'GET');
+            return users;
+        } catch (err) {
+            if (err.status === StatusCodes.NOT_FOUND) {
+                return {};
+            } else throw new Error(err);
+        }
     }
     static updateUser(userID, userDataToUpdate) {
         return makeRequest(`/api/v1/users/${userID}`, 'PATCH', userDataToUpdate);
