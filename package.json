@@ -30,6 +30,7 @@
     "path": "^0.12.7",
     "query-string": "^8.1.0",
     "uuid": "^9.0.0",
-    "validator": "^13.9.0"
+    "validator": "^13.9.0",
+    "winston": "^3.9.0"
   }
 }
