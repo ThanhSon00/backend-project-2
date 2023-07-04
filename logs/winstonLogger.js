@@ -10,10 +10,8 @@ const winstonLogger = winston.createLogger({
     ],
 });
 
-if (process.env.ENV === 'development') {
-    winstonLogger.add(new winston.transports.Console({
-        format: winston.format.simple(),
-    }));
-}
+winstonLogger.add(new winston.transports.Console({
+    format: winston.format.simple(),
+}));
 
 module.exports = winstonLogger;
