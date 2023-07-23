@@ -15,7 +15,7 @@ const doLogin = async (req, res) => {
     const tokens = await SessionService.createSession(user, rememberMe);
 
     setCookies(res, tokens);
-    if (user.isGoogleUser) return res.redirect(`${originURL}/home`);
+    if (user.socialConnectInfo.isGoogleUser) return res.redirect(`${originURL}/home`);
     return res.status(StatusCodes.OK).send();
 }
 

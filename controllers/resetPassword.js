@@ -11,8 +11,8 @@ const renderPage = async (req, res) => {
 const resetPassword = async (req, res) => {
     const { newPassword, userID } = req.body;
     const userDataToUpdate = { 
-        password: newPassword,
-        lockToken: null, 
+        'securityInfo.password': newPassword,
+        'securityInfo.lockToken': null, 
     };
     await UserModel.updateUser(userID, userDataToUpdate);
     return res.status(StatusCodes.OK).send('You have changed password successfully');

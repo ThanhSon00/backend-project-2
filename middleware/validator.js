@@ -22,12 +22,13 @@ const validateEmail = async (req, res, next) => {
         return res.status(StatusCodes.BAD_REQUEST).send('Email not valid');
     }
     
-    const user = await UserModel.getUsers({ email });
+    const users = await UserModel.getUsers({ 'normalInfo.email': email });
+    const user = users[0];
     if (!user) {
         return res.status(StatusCodes.NOT_FOUND).send('Email not found');
     }    
     req.body._id = user._id;
-    req.body.name = user.email;
+    req.body.name = user.normalInfo.email;
     req.body.user = user;
     return next();
 }
@@ -39,7 +40,8 @@ const validateLockToken = async (req, res, next) => {
         return res.status(StatusCodes.UNAUTHORIZED).send('Session expired');
     }
 
-    const user = await UserModel.getUsers({ lockToken: token });
+    const users = await UserModel.getUsers({ 'securityInfo.lockToken': token });
+    const user = users[0];
     if (!user) return res.status(StatusCodes.BAD_REQUEST).send('Invalid Token');   
     req.body.user = user;
     return next();
@@ -54,7 +56,6 @@ const validateLockToken = async (req, res, next) => {
 }
 
 const validateLoginInput = async (req, res, next) => {
-    console.log(req.ip);
     const { email, password, credential, selector, name } = req.body;
     if (userLoginByGoogle() || userLoginByFacebook()) {
         return next();

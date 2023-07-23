@@ -14,7 +14,9 @@ class SessionService {
 
     static refreshSession(rememberToken, refreshToken) {
         return makeRequest(`/api/v1/sessions`, 'PATCH', { rememberToken, refreshToken }, (err, newTokens) => {
-            if (err) return;
+            if (err) {
+                return;
+            }
             return newTokens;
         })
     }

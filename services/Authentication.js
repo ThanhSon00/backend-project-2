@@ -20,11 +20,12 @@ class AuthService {
         return user;    
     }
     static async #normalLogin(email, password) {
-        const user = await UserModel.getUsers({ email });
+        const users = await UserModel.getUsers({ 'normalInfo.email': email });
+        const user = users[0];
         if (!user) return;
-        const match = await bcrypt.compare(password, user.password);
+        const match = await bcrypt.compare(password, user.securityInfo.password);
         if (!match) return;
-        if (user.isGoogleUser) return;
+        if (user.socialConnectInfo.isGoogleUser) return;
         return user;
     }
 
@@ -32,8 +33,9 @@ class AuthService {
         const { email, name, picture } = await this.#verify(credential);
         let user;
         try {
-            user = await UserModel.getUsers({ email });
-            if (!user.isGoogleUser) return;
+            const users = await UserModel.getUsers({ 'normalInfo.email': email });
+            user = users[0];
+            if (!user.socialConnectInfo.isGoogleUser) return;
         } catch (err) {
             user = await UserModel.createUser({
                 email, 
@@ -57,7 +59,8 @@ class AuthService {
     static async #facebookLogin(name, selector) {
         let user;
         try {
-            user = await makeRequest(`/api/v1/users?selector=${selector}`);
+            const users = await makeRequest(`/api/v1/users?selector=${selector}`);
+            user = users[0];
         } catch (err) {
             user = await makeRequest(`/api/v1/users`, 'POST', {
                 name,

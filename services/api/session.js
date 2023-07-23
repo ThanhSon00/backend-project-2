@@ -2,7 +2,6 @@ const { StatusCodes } = require("http-status-codes")
 const getAccessPayload = require('../../modules/getAccessPayload');
 const getRefreshPayload = require('../../modules/getRefreshPayload');
 const getRememberPayload = require('../../modules/getRememberPayload');
-const filterObject = require('../../modules/filterObject');
 const jwt = require('jsonwebtoken');
 const UserModel = require("../../models/User");
 
@@ -41,20 +40,19 @@ const createSession = async (req, res) => {
 
 
 const createAndSaveTokens = async (user, rememberMe) => {
-    const filteredUser = filterObject(user, ['_id', 'email', 'name', 'avatar', 'title', 'selector']);
-    const accessPayload = getAccessPayload(filteredUser);
+    const accessPayload = getAccessPayload(user);
     const accessToken = jwt.sign(accessPayload, process.env.ACCESS_SECRET);
 
-    const refreshPayload = getRefreshPayload(filteredUser);
+    const refreshPayload = getRefreshPayload(user);
     const refreshToken = jwt.sign(refreshPayload, process.env.REFRESH_SECRET);
     
-    const rememberPayload = getRememberPayload(filteredUser);
+    const rememberPayload = getRememberPayload(user);
     const rememberToken = jwt.sign(rememberPayload, process.env.REMEMBER_SECRET);
 
-    const userID = filteredUser._id;
+    const userID = user._id;
     await UserModel.updateUser(userID, {
-        token: refreshPayload.jti,
-        validator: rememberPayload.validator,
+        'securityInfo.token': refreshPayload.jti,
+        'securityInfo.validator': rememberPayload.validator,
     })
 
     const tokens = { accessToken, refreshToken, rememberToken };
@@ -64,8 +62,8 @@ const createAndSaveTokens = async (user, rememberMe) => {
 
 const revokeTokens = async (user) => {
     UserModel.updateUser(user._id, {
-        token: null,
-        validator: null,    
+        'securityInfo.token': null,
+        'securityInfo.validator': null,    
     });
 }
 

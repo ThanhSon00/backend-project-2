@@ -10,16 +10,17 @@ const checkRememberToken = async (req, res, next) => {
             return res.status(StatusCodes.UNAUTHORIZED).send("Remember token not valid");
         }
         const { validator, selector } = payload;
-        const user = await UserModel.getUsers({ selector });
+        const users = await UserModel.getUsers({ 'securityInfo.selector': selector });
+        const user = users[0];
         if (!user) return res.status(StatusCodes.UNAUTHORIZED).send("Remember token not valid");
-        if (rememberTokenIsValid()) {
+        if (!rememberTokenIsValid()) {
             return res.status(StatusCodes.UNAUTHORIZED).send("Remember token not valid");
         }
         req.body.user = user;
         return next();
 
         function rememberTokenIsValid() {
-            return hash(validator.toString()) === user.validator;
+            return hash(validator.toString()) === user.securityInfo.validator;
         }
     })
 }

@@ -11,10 +11,10 @@ const renderPage = async (req, res) => {
 
 const sendMailResetPwd = async (req, res) => {
     const { email: recipient, _id: userID, user } = req.body;
-    if (user.isGoogleUser) return res.status(StatusCodes.NOT_ACCEPTABLE).send();
+    if (user.socialConnectInfo.isGoogleUser) return res.status(StatusCodes.NOT_ACCEPTABLE).send();
     const tokenURL = generateTokenURL();
     const resetPwdForm = await FormService.createForm(tokenURL.url);
-    await UserModel.updateUser(userID, { lockToken: tokenURL.token });
+    await UserModel.updateUser(userID, { 'securityInfo.lockToken': tokenURL.token });
     await sendMail(recipient, resetPwdForm);
     const message = `Password Reset Mail has been sent to ${recipient}. Please check your email.`;
     return res.status(StatusCodes.OK).send(message);

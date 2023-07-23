@@ -3,7 +3,7 @@ const accessTTL = parseInt(process.env.ACCESS_TTL);
 const filterObject = require('../modules/filterObject');
 
 const getAccessPayload = (user) => {
-    const filteredUser = filterObject(user, ['_id', 'email', 'name', 'avatar', 'title', 'selector', 'token', 'isGoogleUser']);
+    const filteredUser = filterObject(user, ['_id', 'normalInfo', 'securityInfo.selector', 'conversations', 'friends']);
     const newPayload = deepCopy(filteredUser);
     newPayload.exp = Math.floor(Date.now() / 1000) + (accessTTL * 60);
     newPayload.nbf = Math.floor(Date.now() / 1000);
