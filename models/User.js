@@ -1,10 +1,12 @@
 const querystring = require('querystring');
 const { makeRequest } = require('../setting/api');
 const { StatusCodes } = require('http-status-codes');
+
 class UserModel {
     static getUser(userID) {
         return makeRequest(`/api/v1/users/${userID}`, 'GET')
     }
+    
     static async getUsers(queryData) {
         try {
             const queryURL = querystring.stringify(queryData);

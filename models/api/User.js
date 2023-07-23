@@ -1,51 +1,72 @@
 const mongoose = require('../../database/connect');
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto');
+const { smallConversationSchema, normalInfoSchema } = require('./Conversation');
 
-const userSchema = new mongoose.Schema({
-  name: String,
-  avatar: String,
-  title: String,
+const uniqueNormalInfoSchema = normalInfoSchema.omit(['email']);
+uniqueNormalInfoSchema.add({ email: { type: String, unique: true, sparse: true } });
+
+const securityInfoSchema = new mongoose.Schema({
   password: String,
-  email: { type: String, unique: true, sparse: true },
-  conversation: Array,
   token: String,
   selector: String,
   validator: String,
   lockToken: String,
+}, { _id: false });
+
+const socialConnectInfoSchema = new mongoose.Schema({
   isGoogleUser: Boolean,
   isFacebookUser: Boolean,
+}, { _id: false });
+
+const friendSchema = new mongoose.Schema({
+  _id: {
+    type: mongoose.Types.ObjectId,
+    ref: "user"
+  },
+  normalInfo: normalInfoSchema
+}, { _id: false })
+
+const userSchema = new mongoose.Schema({
+  normalInfo: uniqueNormalInfoSchema,
+  securityInfo: securityInfoSchema,
+  socialConnectInfo: socialConnectInfoSchema,
+  conversations: [smallConversationSchema], 
+  friends: [friendSchema], 
 });
 
+
+// Hooks
 userSchema.pre('save', async function (next) {
   const user = this;
-  if (!user.isModified('password')) return next();
+  if (!user.socialConnectInfo.isModified('securityInfo.password')) return next();
   const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(user.password, salt);
-  user.password = hash;
-  if (!user.selector) {
-    user.selector = Math.floor(Math.random() * 9000000000) + 1000000000;
+  const hash = await bcrypt.hash(user.securityInfo.password, salt);
+  user.securityInfo.password = hash;
+  if (!user.securityInfo.selector) {
+    user.securityInfo.selector = Math.floor(Math.random() * 9000000000) + 1000000000;
   }
-  next();
+  return next();
 });
 
 userSchema.pre('findOneAndUpdate', async function (next) {
   const user = this;
-  if (user._update.validator) {
+  if (user._update['securityInfo.validator']) {
     const secret = process.env.SHA256_SECRET;
-    const message = user._update.validator.toString();
+    const message = user._update['securityInfo.validator'].toString();
     const hash = crypto.createHmac('sha256', secret)
       .update(message)
       .digest('hex');
-    user._update.validator = hash
-  }
-  else if (user._update.password) {
+    user._update['securityInfo.validator'] = hash
+  } else if (user._update['securityInfo.password']) {
     const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(user._update.password, salt);
-    user._update.password = hash;
+    const hash = await bcrypt.hash(user._update['securityInfo.password'], salt);
+    user._update['securityInfo.password'] = hash;
   }
   return next();
 });
 
 const User = mongoose.model('user', userSchema);
-module.exports = User;
+module.exports = {
+  User,
+}

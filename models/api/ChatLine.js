@@ -1,14 +1,25 @@
 const mongoose = require('../../database/connect');
 
 const chatLineSchema = new mongoose.Schema({
-    description: String,
+    content: String,
     timestamp: {
-        type: Date, 
-        default: Date.now 
+        type: String, 
     },
-    userID: mongoose.Types.ObjectId
+    userID: {
+        type: mongoose.Types.ObjectId,
+        ref: 'user',
+    },
+    conversationID: {
+        type: mongoose.Types.ObjectId,
+        ref: 'conversation',
+    }
 });
 
 const ChatLine = mongoose.model('chatLine', chatLineSchema);
 
-module.exports = ChatLine;
+chatLineSchema.remove('conversationID');
+
+module.exports = {
+    ChatLine,
+    chatLineSchema
+};
