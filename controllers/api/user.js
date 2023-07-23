@@ -26,6 +26,14 @@ const updateUser = async (req, res) => {
     return res.status(StatusCodes.OK).json(user);
 }
 
+const getUserConversations = async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findById(id, 'conversations');
+    
+    const userConversations = user.conversations;
+    return res.status(StatusCodes.OK).json(userConversations);
+}
+
 const createUser = async (req, res) => {
     const { name, email, _id } = req.body;
     const isFacebookUser = req.body.isFacebookUser || false;
@@ -51,11 +59,90 @@ const createUser = async (req, res) => {
     return res.status(StatusCodes.CREATED).json(user);
 }
 
+const createUserFriend = async (req, res) => {
+    const objectIdToString = (id) => { return JSON.stringify(id).replaceAll(`"`, ``) };
+    const { id } = req.params;
+    const { _id, normalInfo } = req.body;
+    const userFriend = { _id, normalInfo };
+    const newFriendID = userFriend._id;
+
+    const friend = await User.findById(userFriend._id);
+    const user = await User.findById(id);
+    
+    const userAddFriendHimself = objectIdToString(user._id) == newFriendID;
+    const userHadAddedThatFriendBefore = user.friends.find(friend => objectIdToString(friend._id) == newFriendID);
+    const members = [ userFriend, user ];
+
+    if (userAddFriendHimself) {
+        return res.status(StatusCodes.CONFLICT).send('Cannot add yourself as friend');
+    }
+    if (userHadAddedThatFriendBefore) {
+        return res.status(StatusCodes.CONFLICT).send('That user already your friend');
+    }
+    
+    const conversation = await ConversationModel.create({ members });
+    
+    conversation.name = userFriend.normalInfo.title;
+    user.friends.push(userFriend);
+    user.conversations.push(conversation);
+
+    conversation.name = user.normalInfo.title;
+    friend.friends.push(user);
+    friend.conversations.push(conversation);
+
+    await friend.save();
+    await user.save();
+    return res.status(StatusCodes.CREATED).json(userFriend);
+}
+
+const getUserFriends = async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    const userFriend = user.friends;
+    return res.status(StatusCodes.OK).json(userFriend);
+}
 
 
+const deleteUserFriend = async (req, res) => {
+    const { id, friendID } = req.params;
+    const user = await User.findById(id);
+    const friend = await User.findById(friendID);
+
+    user.friends.pull(friendID);
+    friend.friends.pull(user._id);
+
+    await friend.save();
+    await user.save();
+
+    return res.status(StatusCodes.OK).send();
+}
+
+const deleteUserConversation = async (req, res) => {
+    const { id, conversationID } = req.params;
+    const user = await User.findById(id);
+    const conversation = await Conversation.findById(conversationID);
+    const member = conversation.members.id(id);
+    
+    if (!conversation.isGroup) {
+        return res.status(StatusCodes.BAD_REQUEST).send("Can not delete this conversation");
+    }
+
+    member.hasLeft = true;
+    user.conversations.pull(conversationID);
+
+    await conversation.save();
+    await user.save();
+
+    return res.status(StatusCodes.OK).send();    
+}
 module.exports = {
     getUsers,
     createUser,
+    createUserFriend,
     getUser,
     updateUser,
+    getUserConversations,
+    getUserFriends,
+    deleteUserFriend,
+    deleteUserConversation,
 }
