@@ -3,6 +3,7 @@ const router = express.Router();
 const checkAccessToken = require('../../middleware/api/checkAccessToken');
 const checkRefreshToken = require('../../middleware/api/checkRefreshToken');
 const checkRememberToken = require('../../middleware/api/checkRememberToken');
+const apiErrorHandler = require('../../middleware/api/apiErrorHandler');
 
 const {
     updateSession,
@@ -12,13 +13,13 @@ const {
 } = require('../../services/api/session');
 
 router.route('/:accessToken')
-    .get(checkAccessToken, getSession)
-    .delete(checkAccessToken, deleteSession);
+    .get(checkAccessToken, apiErrorHandler(getSession))
+    .delete(checkAccessToken, apiErrorHandler(deleteSession));
 
 router.route('/')
-    .post(createSession)
-    .patch(checkRefreshToken, checkRememberToken)
+    .post(apiErrorHandler(createSession))
+    .patch(checkRefreshToken, checkRememberToken);
     
-router.route('/').patch(updateSession);
+router.route('/').patch(apiErrorHandler(updateSession));
 
 module.exports = router;
