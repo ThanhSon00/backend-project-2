@@ -49,10 +49,9 @@ const createUser = async (req, res) => {
     const socialConnectInfo = { isGoogleUser, isFacebookUser };
     const conversations = [];
     const friends = []; 
-    const userData = { _id, normalInfo, securityInfo, socialConnectInfo, conversations, friends };
+    const onlineStatus = {};
+    const userData = { _id, normalInfo, securityInfo, socialConnectInfo, conversations, friends, onlineStatus };
     
-     // Avoid violating unique constraint when email is null in db
-    if (!userData.normalInfo.email) delete userData.normalInfo.email;
     const user = await User.create(userData);
 
     return res.status(StatusCodes.CREATED).json(user);

@@ -11,7 +11,7 @@ const renderPage = async (req, res) => {
 const doLogin = async (req, res) => {
     const { rememberMe } = req.body;
     const user = await AuthService.doLogin(req);
-    if (!user) return res.status(StatusCodes.BAD_REQUEST).send();
+    if (!user) return res.status(StatusCodes.BAD_REQUEST).send('Email or password not correct');
     const tokens = await SessionService.createSession(user, rememberMe);
 
     setCookies(res, tokens);

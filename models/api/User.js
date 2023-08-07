@@ -26,25 +26,40 @@ const friendSchema = new mongoose.Schema({
   normalInfo: normalUserInfoSchema
 }, { _id: false })
 
+const onlineStatusSchema = new mongoose.Schema({
+  lastOnlineAt: Date,
+  isOnline: Boolean,
+})
+
 const userSchema = new mongoose.Schema({
   normalInfo: uniqueNormalInfoSchema,
   securityInfo: securityInfoSchema,
   socialConnectInfo: socialConnectInfoSchema,
   conversations: [smallConversationSchema], 
-  friends: [friendSchema], 
-});
-
+  friends: [friendSchema],
+  onlineStatus: onlineStatusSchema
+})
 
 // Hooks
 userSchema.pre('save', async function (next) {
   const user = this;
-  if (!user.socialConnectInfo.isModified('securityInfo.password')) return next();
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(user.securityInfo.password, salt);
-  user.securityInfo.password = hash;
-  if (!user.securityInfo.selector) {
-    user.securityInfo.selector = Math.floor(Math.random() * 9000000000) + 1000000000;
+  const createOrUpdateSession = () => {
+    user.onlineStatus.isOnline = true;
+    user.onlineStatus.lastOnlineAt = null;
   }
+  const deleteSession = () => {
+    user.onlineStatus.isOnline = false;
+    user.onlineStatus.lastOnlineAt = new Date();  
+  }
+
+  if (user.directModifiedPaths().toString() === ['securityInfo.token', 'securityInfo.validator'].toString() 
+   && user.directModifiedPaths().toString() === ['securityInfo.validator', 'securityInfo.token'].toString()) {
+    if (user.securityInfo.token && securityInfo.validator) {
+      createOrUpdateSession();
+    } else if (!user.securityInfo.token && !securityInfo.validator) {
+      deleteSession();
+    }
+  } 
   return next();
 });
 
