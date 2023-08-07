@@ -1,56 +1,59 @@
 const { Conversation: ConversationModel} = require('../../models/api/Conversation');
 const { User: UserModel } = require('../../models/api/User');
+const { ChatLine: ChatLineModel } = require('../../models/api/ChatLine');
 const { StatusCodes } = require('http-status-codes');
 const mongoose = require('../../database/connect')
 
 const createConversation = async (req, res) => {
-    const { name, members, chatLines, description } = req.body;
-    const conversationData = { name, members, chatLines, description };
-    const conversation = await ConversationModel.create(conversationData);
+    const { name, members, chatLines, description, avatar } = req.body;
+    const normalInfo = { name, avatar };
+    const conversationData = { normalInfo, members, chatLines, description };
+
+    if (!members) return res.status(StatusCodes.BAD_REQUEST).send('Must have members');
     
-    if (members) {
-        for (let i = 0; i < members.length; i++) {
-            const user = await UserModel.findById(members[i]._id);
-            user.conversations.push(conversation);
-            await user.save();    
-        }        
-    }
+    const conversation = await ConversationModel.create(conversationData);
+    for (let i = 0; i < members.length; i++) {
+        const user = await UserModel.findById(members[i]._id);
+        user.conversations.push(conversation);
+        await user.save();    
+    }        
 
     return res.status(StatusCodes.CREATED).json(conversation);
 }
 
 const getConversation = async (req, res) => {
     const { conversationID } = req.params;
-    const conversation = await ConversationModel.findById(conversationID, 'name');
+    const conversation = await ConversationModel.findById(conversationID, 'normalInfo');
     return res.status(StatusCodes.OK).json(conversation);
 }
 
 const getConversationChatLines = async (req, res) => {
     const { conversationID } = req.params;
     const conversation = await ConversationModel.findById(conversationID, 'chatLines');
-
     const chatLines = conversation?.chatLines;
     return res.status(StatusCodes.OK).json(chatLines);
 }
 
 const getConversationUsers = async (req, res) => {
     const { conversationID } = req.params;
-    const conversation = await ConversationModel.findById(conversationID);
+    const conversation = await ConversationModel.findById(conversationID, 'members');
     const members = conversation?.members;
     return res.status(StatusCodes.OK).json(members);
 }
 
 const createConversationChatLine = async (req, res) => {
     const { conversationID } = req.params;
-    const { content, timestamp, userID }  = req.body;
-    const chatLine = {
+    const { content, userID }  = req.body;
+    const chatLineData = {
         content,
-        timestamp,
         userID: new mongoose.Types.ObjectId(userID),
     };
     const conversation = await ConversationModel.findById(conversationID);
-    conversation.chatLines.push(chatLine);
-    await conversation.save();
+    conversation.chatLines.push(chatLineData);
+    const updatedConversation = await conversation.save();
+    const chatLinesLength = updatedConversation.chatLines.length;
+    const chatLine = updatedConversation.chatLines[chatLinesLength - 1];
+
     return res.status(StatusCodes.CREATED).json(chatLine);
 }
 

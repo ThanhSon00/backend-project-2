@@ -18,28 +18,40 @@ const memberSchema = new mongoose.Schema({
     hasLeft: Boolean,
 }, { _id: false });
 
-const smallConversationSchema = mongoose.Schema({
+const smallMemberSchema = memberSchema.clone();
+smallMemberSchema.remove(['normalInfo', 'hasLeft']);
+
+const normalInfoSchema = new mongoose.Schema({
     name: String,
+    avatar: String,
+    isGroup: Boolean,
+}, { _id: false })
+
+const smallConversationSchema = mongoose.Schema({
+    normalInfo: normalInfoSchema,
+    members: [smallMemberSchema],
     _id: { 
         type: mongoose.Types.ObjectId, 
         ref: 'conversation'
-    }
+    },
 }, { _id: false })
 
 const conversationSchema = new mongoose.Schema({
-    name: String,
-    description: String,
-    isGroup: Boolean,
+    normalInfo: normalInfoSchema,
     members: [memberSchema],
-    chatLines: [chatLineSchema]
+    chatLines: [chatLineSchema],
+    description: String,
 });
 
-conversationSchema.pre('save', async function (next) {
+conversationSchema.pre('save', function (next) {
     const conversation = this;
+    if (!conversation.normalInfo) {
+        conversation.normalInfo = {};
+    }
     if (conversation.members.length === 2) {
-        conversation.isGroup = false;
+        conversation.normalInfo.isGroup = false;
     } else if (conversation.members.length > 2) {
-        conversation.isGroup = true;
+        conversation.normalInfo.isGroup = true;
     } else throw new Error("Must be 2 members or above");
     return next();
 })
