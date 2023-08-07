@@ -4,7 +4,6 @@
     
 <!-- Mirrored from themesbrand.com/chatvia/layouts/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 May 2021 20:24:49 GMT -->
 <head>
-        
         <meta charset="utf-8" />
         <title>Chat | Chatvia - Responsive Bootstrap 4 Chat App</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,8 +83,8 @@
                             </a>
                         </li>
                         <li class="nav-item dropdown profile-user-dropdown d-inline-block d-lg-none">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="<%= user.avatar %>" alt="" class="profile-user rounded-circle">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="text-align: -webkit-center;">
+                                <img src="<%= user?.normalInfo.avatar %>" alt="" class="profile-user rounded-circle">
                             </a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#">Profile <i class="ri-profile-line float-end text-muted"></i></a>
@@ -107,8 +106,8 @@
                         </li>
 
                         <li class="nav-item btn-group dropup profile-user-dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="<%= user.avatar %>" alt="" class="profile-user rounded-circle">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="text-align: -webkit-center;">
+                                <img src="<%= user?.normalInfo.avatar %>" alt="" class="profile-user rounded-circle">
                             </a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#">Profile <i class="ri-profile-line float-end text-muted"></i></a>
@@ -150,10 +149,10 @@
 
                             <div class="text-center p-4 border-bottom">
                                 <div class="mb-4">
-                                    <img src="<%= user.avatar %>" class="rounded-circle avatar-lg img-thumbnail" alt="">
+                                    <img src="<%= user?.normalInfo.avatar %>" class="rounded-circle avatar-lg img-thumbnail" alt="">
                                 </div>
 
-                                <h5 class="font-size-16 mb-1 text-truncate"><%= user.title %></h5>
+                                <h5 class="font-size-16 mb-1 text-truncate"><%= user?.normalInfo.title %></h5>
                                 <p class="text-muted text-truncate mb-1"><i class="ri-record-circle-fill font-size-10 text-success me-1 ms-0 d-inline-block"></i> Active</p>
                             </div>
                             <!-- End profile user -->
@@ -178,12 +177,12 @@
                                             <div class="accordion-body">
                                                 <div>
                                                     <p class="text-muted mb-1">Name</p>
-                                                    <h5 class="font-size-14"><%= user.title %></h5>
+                                                    <h5 class="font-size-14"><%= user?.normalInfo.title %></h5>
                                                 </div>
 
                                                 <div class="mt-4">
                                                     <p class="text-muted mb-1">Email</p>
-                                                    <h5 class="font-size-14"><%= user.email %></h5>
+                                                    <h5 class="font-size-14"><%= user?.normalInfo.email %></h5>
                                                 </div>
 
                                                 <div class="mt-4">
@@ -1603,7 +1602,6 @@
                                                 <div class="float-end">
                                                     <button type="button" class="btn btn-light btn-sm"><i class="ri-edit-fill me-1 ms-0 align-middle"></i> Edit</button>
                                                 </div>
-
                                                 <div>
                                                     <p class="text-muted mb-1">Name</p>
                                                     <h5 class="font-size-14"><%= user.title %></h5>
@@ -1611,7 +1609,7 @@
 
                                                 <div class="mt-4">
                                                     <p class="text-muted mb-1">Email</p>
-                                                    <h5 class="font-size-14"><%= user.email %></h5>
+                                                    <h5 class="font-size-14"><%= user?.normalInfo.email %></h5>
                                                 </div>
 
                                                 <div class="mt-4">
@@ -1860,6 +1858,7 @@
                         <!-- start chat conversation -->
                         <div class="chat-conversation p-3 p-lg-4" data-simplebar="init">
                             <ul class="list-unstyled mb-0">
+
                                 <li>
                                     <div class="conversation-list">
                                         <div class="chat-avatar">
@@ -1894,7 +1893,7 @@
                                 <li class="right">
                                     <div class="conversation-list">
                                         <div class="chat-avatar">
-                                            <img src="<%= user.avatar %>" alt="">
+                                            <img src="<%= user?.normalInfo.avatar %>" alt="">
                                         </div>
     
                                         <div class="user-chat-content">
@@ -1919,7 +1918,7 @@
                                                 </div>
                                             </div>
                                             
-                                            <div class="conversation-name"><%= user.title %></div>
+                                            <div class="conversation-name"><%= user?.normalInfo.title %></div>
                                         </div>
                                     </div>
                                 </li>
@@ -1987,7 +1986,7 @@
                                 <li class="right">
                                     <div class="conversation-list">
                                         <div class="chat-avatar">
-                                            <img src="<%= user.avatar %>" alt="">
+                                            <img src="<%= user?.normalInfo.avatar %>" alt="">
                                         </div>
     
                                         <div class="user-chat-content">
@@ -2011,7 +2010,7 @@
                                                 </div>
                                             </div>
     
-                                            <div class="conversation-name"><%= user.title %></div>
+                                            <div class="conversation-name"><%= user?.normalInfo.title %></div>
                                         </div>
                                         
                                     </div>
@@ -2110,7 +2109,7 @@
                                 <li class="right">
                                     <div class="conversation-list">
                                         <div class="chat-avatar">
-                                            <img src="<%= user.avatar %>" alt="">
+                                            <img src="<%= user?.normalInfo.avatar %>" alt="">
                                         </div>
     
                                         <div class="user-chat-content">
@@ -2168,7 +2167,7 @@
                                                 
                                             </div>
                                             
-                                            <div class="conversation-name"><%= user.title %></div>
+                                            <div class="conversation-name"><%= user?.normalInfo.title %></div>
                                         </div>
                                         
                                     </div>
@@ -2227,10 +2226,6 @@
                                             </li>
                                             <li class="list-inline-item">
                                                 <button type="submit" 
-                                                data-sender-id="<%= user._id %>" 
-                                                data-receiver-id="<%= receiver._id %>"
-                                                data-sender-name="<%=user.name %>" 
-                                                data-sender-avatar="<%= user.avatar %>" 
                                                 class="btn btn-primary font-size-16 btn-lg chat-send waves-effect waves-light">
                                                     <i class="ri-send-plane-2-fill"></i>
                                                 </button>
@@ -2290,7 +2285,7 @@
 
                                             <div class="mt-4">
                                                 <p class="text-muted mb-1">Email</p>
-                                                <h5 class="font-size-14"><%= user.email %></h5>
+                                                <h5 class="font-size-14"><%= user?.normalInfo.email %></h5>
                                             </div>
 
                                             <div class="mt-4">

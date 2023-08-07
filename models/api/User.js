@@ -1,10 +1,9 @@
 const mongoose = require('../../database/connect');
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto');
-const { smallConversationSchema, normalInfoSchema } = require('./Conversation');
+const { smallConversationSchema, normalUserInfoSchema } = require('./Conversation');
 
-const uniqueNormalInfoSchema = normalInfoSchema.omit(['email']);
-uniqueNormalInfoSchema.add({ email: { type: String, unique: true, sparse: true } });
+const uniqueNormalInfoSchema = normalUserInfoSchema;
 
 const securityInfoSchema = new mongoose.Schema({
   password: String,
@@ -24,7 +23,7 @@ const friendSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "user"
   },
-  normalInfo: normalInfoSchema
+  normalInfo: normalUserInfoSchema
 }, { _id: false })
 
 const userSchema = new mongoose.Schema({

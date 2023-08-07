@@ -1,7 +1,8 @@
 const mongoose = require('../../database/connect');
 const { chatLineSchema } = require('./ChatLine');
 
-const normalInfoSchema = new mongoose.Schema({
+
+const normalUserInfoSchema = new mongoose.Schema({
     name: String,
     title: String,
     avatar: String,
@@ -9,8 +10,11 @@ const normalInfoSchema = new mongoose.Schema({
 }, { _id: false })  
 
 const memberSchema = new mongoose.Schema({
-    _id: mongoose.Types.ObjectId,
-    normalInfo: normalInfoSchema,
+    _id: {
+        type: mongoose.Types.ObjectId,
+        ref: 'user'
+    },
+    normalInfo: normalUserInfoSchema,
     hasLeft: Boolean,
 }, { _id: false });
 
@@ -45,5 +49,5 @@ const Conversation = mongoose.model('conversation', conversationSchema);
 module.exports = {
     Conversation,
     smallConversationSchema,
-    normalInfoSchema,
+    normalUserInfoSchema,
 };
