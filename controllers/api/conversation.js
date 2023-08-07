@@ -74,12 +74,25 @@ const createConversationUser = async (req, res) => {
         const user = await UserModel.findById(members[i]._id);
         conversation.members.push(members[i]);
         user.conversations.push(conversation);
-        console.log(user);
         await user.save();    
     }
     await conversation.save();
-
     return res.status(StatusCodes.CREATED).json(members);
+}
+
+const getChatLines = async (req, res) => {
+    const { conversationID } = req.params;
+    const { sort_by: field, limit } = req.query;
+    const chatLines = await ChatLineModel.find({ conversationID }).sort(field).limit(limit);
+    if (chatLines.length === 0) return res.status(StatusCodes.NOT_FOUND).send();
+    return res.status(StatusCodes.OK).json(chatLines);
+}
+
+const createChatLine = async (req, res) => {
+    const { conversationID } = req.params;
+    const { content, userID } = req.body;
+    const chatLine = await ChatLineModel.create({ content, userID, conversationID });
+    return res.status(StatusCodes.CREATED).json(chatLine);
 }
 
 module.exports = {
@@ -89,4 +102,6 @@ module.exports = {
     getConversationUsers,
     createConversationChatLine,
     createConversationUser,
+    getChatLines,
+    createChatLine,
 }

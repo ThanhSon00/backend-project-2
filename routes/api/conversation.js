@@ -5,10 +5,10 @@ const apiErrorHandler = require('../../middleware/api/apiErrorHandler');
 const {
     createConversation,
     getConversation,
-    getConversationChatLines,
     getConversationUsers,
-    createConversationChatLine,
     createConversationUser,
+    getChatLines,
+    createChatLine,
 } = require('../../controllers/api/conversation');
 
 router.route('/:conversationID/users')
@@ -16,8 +16,8 @@ router.route('/:conversationID/users')
     .post(apiErrorHandler(createConversationUser));
 
 router.route('/:conversationID/chat-lines')
-    .get(apiErrorHandler(getConversationChatLines))
-    .post(apiErrorHandler(createConversationChatLine));
+    .get(apiErrorHandler(getChatLines))
+    .post(apiErrorHandler(createChatLine));
 
 router.route('/:conversationID')
     .get(apiErrorHandler(getConversation));

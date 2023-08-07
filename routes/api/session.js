@@ -20,6 +20,7 @@ router.route('/')
     .post(apiErrorHandler(createSession))
     .patch(checkRefreshToken, checkRememberToken);
     
-router.route('/').patch(apiErrorHandler(updateSession));
+router.route('/')
+    .patch(apiErrorHandler(updateSession));
 
 module.exports = router;
