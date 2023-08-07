@@ -1,4 +1,5 @@
 import GroupPage from "./GroupPage.js";
+import User from "../data/User.js"
 
 export default class GroupPageIcon {
     #selectors;
@@ -6,6 +7,8 @@ export default class GroupPageIcon {
     #user;
     
     constructor(user) {
+        if (!(user instanceof User)) throw new Error("Must be User type");
+  
         this.#user = user;
         this.#selectors = "#pills-groups-tab";
         this.#element = document.querySelector(this.#selectors);

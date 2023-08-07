@@ -2,7 +2,6 @@ const { User } = require('../../models/api/User');
 const { StatusCodes } = require('http-status-codes')
 const crypto = require('crypto');
 const { Conversation: ConversationModel, Conversation } = require('../../models/api/Conversation');
-
 const getUsers = async (req, res) => {
     const filters = req.query;
     const users = await User.find(filters);
@@ -80,15 +79,20 @@ const createUserFriend = async (req, res) => {
         return res.status(StatusCodes.CONFLICT).send('That user already your friend');
     }
     
-    const conversation = await ConversationModel.create({ members });
-    
-    conversation.name = userFriend.normalInfo.title;
-    user.friends.push(userFriend);
-    user.conversations.push(conversation);
+    const myConversation = await ConversationModel.create({ members });
 
-    conversation.name = user.normalInfo.title;
+    // Because object store pointer of others then I have to clone conversation
+    const hisConversation = myConversation.$clone();
+
+    myConversation.normalInfo.name = userFriend.normalInfo.title;
+    myConversation.normalInfo.avatar = userFriend.normalInfo.avatar;
+    user.friends.push(userFriend);
+    user.conversations.push(myConversation);
+
+    hisConversation.normalInfo.name = user.normalInfo.title;
+    hisConversation.normalInfo.avatar = user.normalInfo.avatar;
     friend.friends.push(user);
-    friend.conversations.push(conversation);
+    friend.conversations.push(hisConversation);
 
     await friend.save();
     await user.save();

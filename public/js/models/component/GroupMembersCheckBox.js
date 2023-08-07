@@ -1,10 +1,13 @@
 import { friendGroupTemplate } from "../../views/home.js";
+import User from "../data/User.js"
 
 export default class GroupMembersCheckBox {
     #selectors;
     #element;
     #user;
     constructor(user) {
+        if (!(user instanceof User)) throw new Error("Must be User type");
+  
         this.#user = user;
         this.#selectors = "#friend-list";
         this.#element = document.querySelector(this.#selectors);
