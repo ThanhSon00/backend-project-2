@@ -1,4 +1,5 @@
 import ChatLineBox from "./ChatLineBox.js";
+import SendChatLineBtn from "./SendChatLineBtn.js";
 
 export default class ChatLineInput {
     #selectors
@@ -7,6 +8,7 @@ export default class ChatLineInput {
 
     constructor(chatLineBox) {
         if (!(chatLineBox instanceof ChatLineBox)) throw new Error("Must be ChatLineBox type");
+        
         this.#chatLineBox = chatLineBox;
         this.#selectors = `.form-control.form-control-lg.bg-light.border-light`;
         this.#element = document.querySelector(this.#selectors);
@@ -17,38 +19,9 @@ export default class ChatLineInput {
         this.#element.addEventListener('keypress', (event) => {
             event.stopImmediatePropagation();
             if (event.key == "Enter") {
-                event.stopImmediatePropagation();
-                const userID = this.#chatLineBox.user._id;
-                const content = this.content;
-                const timestamp = this.#getTimestamp();
-
-                if (!content) return;
-
-                const chatLineObj = { userID, content, timestamp, user: this.#chatLineBox.user };
-                const conversationID = this.#chatLineBox.conversation._id;
-                fetch(`/api/v1/conversations/${conversationID}/chat-lines`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(chatLineObj)
-                }).then((response) => {
-                    this.#chatLineBox.displayChatLine(chatLineObj);
-                    this.eraseContent();
-
-                    const simpleBar = document.querySelectorAll('.simplebar-content-wrapper')[6];
-                    simpleBar.scrollTop = simpleBar.scrollHeight;
-                })
+                new SendChatLineBtn(this, this.#chatLineBox).element.dispatchEvent(new Event('click'));
             }
         })
-    }
-
-    #getTimestamp() {
-        const now = new Date();
-        const currentHour = now.getHours();
-        const currentMinute = now.getMinutes();
-        const timestamp = `${currentHour}:${currentMinute}`;
-        return timestamp;
     }
 
     eraseContent() {

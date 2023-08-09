@@ -1,5 +1,6 @@
-import { chatAvatarTemplate, chatUserTemplate } from "../../views/home.js";
+import { chatAvatarTemplate, chatUserIdTemplate, chatUserTemplate, getChatLineHTML } from "../../views/home.js";
 import { chatLineTemplate } from "../../views/home.js";
+import User from "../data/User.js";
 
 export default class ChatLine{
     #userID;
@@ -26,13 +27,7 @@ export default class ChatLine{
     }
 
     #render(user) {
-        const chatAvatarHTML = ejs.render(chatAvatarTemplate, { user });
-        const chatUserHTML = ejs.render(chatUserTemplate, { user });
-        const chatLineHTML = ejs.render(chatLineTemplate, { 
-            chatLine: this.toObject(),
-            chatAvatarHTML,
-            chatUserHTML,
-        });
+        const chatLineHTML = getChatLineHTML(user, this);
         return chatLineHTML;        
     }
 

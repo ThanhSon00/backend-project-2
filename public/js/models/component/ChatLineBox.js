@@ -1,4 +1,6 @@
+import  Conversation  from "./Conversation.js"
 import ChatLine from "./ChatLine.js";
+import User from "../data/User.js";
 
 export default class ChatLineBox {
     #conversation
@@ -19,6 +21,8 @@ export default class ChatLineBox {
         const chatLines = await this.#conversation.loadAndGetChatLines();
 
         this.#element.innerHTML = "";
+        
+        if (!chatLines) return;
         for (const chatLineData of chatLines) {
             this.displayChatLine(chatLineData);
         }
@@ -26,9 +30,22 @@ export default class ChatLineBox {
 
     displayChatLine(chatLineData) {
         const chatLineElement = this.#createUserChatLineElement(chatLineData);
-        this.#element.appendChild(chatLineElement);
+        const chatLineContentElement = chatLineElement.querySelector('.ctext-wrap');
+        const lastChatLineElement = this.#element.lastElementChild;
+        const appendChatLine = () => this.#element.appendChild(chatLineElement);
+        
+        if (!lastChatLineElement) return appendChatLine();
+
+        const conversationNameElement = lastChatLineElement.querySelector('.conversation-name');
+        const lastChatLineUserID = lastChatLineElement.querySelector("input.user-id").value;
+
+        if (lastChatLineUserID === chatLineData.userID) {
+            lastChatLineElement
+                .querySelector('.user-chat-content')
+                .insertBefore(chatLineContentElement, conversationNameElement);
+        } else return appendChatLine();
+
     }
-    
 
     #createUserChatLineElement(chatLineData) {
         const members = this.#conversation.members;

@@ -18,11 +18,10 @@ export default class ConversationList {
         return new ConversationList(user);
     }
 
-    displayOnUI() {
-        const conversations = this.#user.conversations;
-
+    async displayOnUI() {
+        const conversations = await this.#user.conversations;
         for (const conversationData of conversations) {
-            const conversation = new Conversation(conversationData, this.#user);
+            const conversation = await Conversation.createdFrom(conversationData, this.#user);
             this.#element.append(conversation.element);
         }
     }
