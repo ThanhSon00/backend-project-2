@@ -18,11 +18,54 @@ const getUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-    const { id } = req.params;
-    const updateUser = req.body;
-    const options = { new: true }
-    const user = await User.findByIdAndUpdate(id, updateUser, options);
-    return res.status(StatusCodes.OK).json(user);
+    const { id: userID } = req.params;
+    const updatedData = req.body;
+    const updatedField = Object.keys(updatedData);
+    const userDoc = await User.findById(userID);
+    const normalInfoUpdatedFields = updatedField.filter(name => name.startsWith('normalInfo')); 
+
+    for (const field in updatedData) {
+        userDoc.set(field, updatedData[field]);
+    }
+
+    if (normalInfoUpdatedFields.length > 0) {
+        for (const friend of userDoc.friends) {
+            const friend1 = JSON.parse(JSON.stringify(friend));
+            const friendDoc = await User.findById(friend1._id);            
+            normalInfoUpdatedFields.forEach(field => {
+                friendDoc.friends.id(userID).set(field, updatedData[field]);    
+            });
+            friendDoc.save();
+        }
+
+        for (const conversation of userDoc.conversations) {
+            const conversation1 = JSON.parse(JSON.stringify(conversation));
+            const conversationDoc = await Conversation.findById(conversation1._id);
+            normalInfoUpdatedFields.forEach(field => {
+                conversationDoc.members.id(userID).set(field, updatedData[field]);
+            });
+            conversationDoc.save();
+        }
+
+        if (normalInfoUpdatedFields.includes('normalInfo.avatar') || normalInfoUpdatedFields.includes('normalInfo.title')) {
+            const friendConversationIDs = userDoc.conversations
+                .filter(conversation => !conversation.isGroup)
+                .map(conversation => conversation._id);
+
+            if (friendConversationIDs.length != userDoc.friends.length) throw new Error('Something went wrong');
+            for (let i = 0; i < userDoc.friends.length; i++) {
+                const friendID = userDoc.friends[i]._id;
+                const friend = await User.findById(friendID);
+                const conversation = friend.conversations
+                    .find(conversation => conversation._id.toString() === friendConversationIDs[i].toString());
+                conversation.normalInfo.name = userDoc.normalInfo.title;
+                conversation.normalInfo.avatar = userDoc.normalInfo.avatar;
+                friend.save();
+            }
+        }
+    }
+    userDoc.save();
+    return res.status(StatusCodes.OK).json(userDoc);
 }
 
 const getUserConversations = async (req, res) => {
