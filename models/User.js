@@ -13,8 +13,8 @@ class UserModel {
             const users = await makeRequest(`/api/v1/users?${queryURL}`, 'GET');
             return users;
         } catch (err) {
-            if (err.status === StatusCodes.NOT_FOUND) {
-                return {};
+            if (err.response?.status === StatusCodes.NOT_FOUND) {
+                return [];
             } else throw new Error(err);
         }
     }

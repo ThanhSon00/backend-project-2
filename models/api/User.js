@@ -63,22 +63,27 @@ userSchema.pre('save', async function (next) {
   return next();
 });
 
-userSchema.pre('findOneAndUpdate', async function (next) {
-  const user = this;
-  if (user._update['securityInfo.validator']) {
-    const secret = process.env.SHA256_SECRET;
-    const message = user._update['securityInfo.validator'].toString();
-    const hash = crypto.createHmac('sha256', secret)
-      .update(message)
-      .digest('hex');
-    user._update['securityInfo.validator'] = hash
-  } else if (user._update['securityInfo.password']) {
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(user._update['securityInfo.password'], salt);
-    user._update['securityInfo.password'] = hash;
-  }
+securityInfoSchema.pre('save', async function (next) {
+  const securityInfo = this;
+  if (securityInfo.isModified('validator')) updateValidator();
+  if (securityInfo.isModified('password')) await updatePassword();
   return next();
-});
+
+  function updateValidator() {
+    if (!securityInfo.validator) return;
+    const validator = securityInfo.validator.toString();
+    const hash = crypto.createHmac('sha256', process.env.SHA256_SECRET)
+      .update(validator)
+      .digest('hex');
+    securityInfo.validator = hash;
+  }
+
+  async function updatePassword() {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(securityInfo.password, salt);
+    securityInfo.password = hash;
+  }
+})
 
 const User = mongoose.model('user', userSchema);
 module.exports = {

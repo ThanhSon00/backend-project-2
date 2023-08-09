@@ -34,6 +34,7 @@ export default class CreateGroupButton {
         const conversationName = groupNameTextBox.value;
         const members = groupMembersCheckBox.getCheckedFriend();
         const description = descriptionTextBox.value;
+        const normalInfo = { name: conversationName }
 
         members.push(user.toObject());
 
@@ -42,22 +43,23 @@ export default class CreateGroupButton {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name: conversationName, description, members })
+            body: JSON.stringify({ normalInfo, description, members })
         });
 
-        if (!response.ok) {
-            console.error('Something went wrong');
-        }
+        if (!response.ok) throw new Error('Something went wrong');
         return await response.json();
     }
 
     async #redirectToConversation(id) {
         const user = this.#createGroupForm.user;
-        const chatPageIcon = new ChatPageIcon(user);
-        const chatPage = await chatPageIcon.loadChatPage();
-        const conversationList = chatPage.conversationList;
+        const chatPage = new ChatPage(user);
+        (await chatPage.conversationList).open(id);
 
-        chatPageIcon.triggerClickEvent();
-        conversationList.open(id);
+        // const chatPageIcon = new ChatPageIcon(user);
+        // const chatPage = await chatPageIcon.loadChatPage();
+        // const conversationList = chatPage.conversationList;
+
+        // chatPageIcon.triggerClickEvent();
+        // conversationList.open(id);
     }
 }

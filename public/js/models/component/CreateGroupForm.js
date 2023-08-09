@@ -1,3 +1,4 @@
+import User from "../data/User.js";
 import CloseFormButton from "./CloseFormButton.js";
 import CreateGroupButton from "./CreateGroupButton.js";
 import DescriptionTextBox from "./DescriptionTextBox.js";
@@ -13,6 +14,8 @@ export default class CreateGroupForm {
     #closeFormButton;
 
     constructor(user) {
+        if (!(user instanceof User)) throw new Error("Must be User type");
+        
         this.#user = user;
         this.#groupNameTextBox = new GroupNameTextBox();
         this.#groupMembersCheckBox = new GroupMembersCheckBox(user); 

@@ -13,10 +13,13 @@ const chatLineSchema = new mongoose.Schema({
     }
 });
 
+chatLineSchema.pre("save", function (next) {
+    const chatLine = this;
+    chatLine.timestamp ||= new Date();
+    return next();
+})
+
 const ChatLine = mongoose.model('chatLine', chatLineSchema);
-
-chatLineSchema.remove('conversationID');
-
 module.exports = {
     ChatLine,
     chatLineSchema

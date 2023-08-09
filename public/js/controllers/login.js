@@ -1,5 +1,6 @@
 const facebookLogin = () => {
 	FB.api('/me', (response) => {
+		const originURL = window.location.origin;
 		fetch(`${originURL}/login`, {
 			method: 'POST',
 			headers: {

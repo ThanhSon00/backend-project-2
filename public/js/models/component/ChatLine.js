@@ -13,12 +13,10 @@ export default class ChatLine{
         this.#timestamp = chatLineData.timestamp;
         this.#userID = chatLineData.userID;
         this.#user = chatLineData.user;
+        
+        if (!(this.#user instanceof User)) throw new Error("Must be user type"); 
     }
     
-    get userID() {
-        return this.#userID;
-    }
-
     createElement() {
         const chatLineHTML = this.#render(this.#user);
         const chatLineEle = document.createElement('li');
@@ -31,11 +29,15 @@ export default class ChatLine{
         return chatLineHTML;        
     }
 
-    toObject() {
-        return {
-            userID: this.#userID,
-            content: this.#content,
-            timestamp: this.#timestamp,
-        }
+    get userID() {
+        return this.#userID;
+    }
+
+    get content() {
+        return this.#content;
+    }
+
+    get timestamp() {
+        return this.#timestamp;
     }
 }

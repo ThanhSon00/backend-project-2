@@ -9,6 +9,9 @@ export default class ChatLineBox {
     #element
 
     constructor(conversation, user) {
+        if (!(conversation instanceof Conversation)) throw new Error("Must be conversation type");
+        if (!(user instanceof User)) throw new Error("Must be user type");
+
         this.#conversation = conversation;
         this.#user = user;
         this.#selectors = "ul.list-unstyled.mb-0";

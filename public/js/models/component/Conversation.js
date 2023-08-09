@@ -18,6 +18,8 @@ export default class Conversation {
     #user;
 
     constructor(conversation, user) {
+        if (!(user instanceof User)) throw new Error("Must be user type");
+
         this.#_id = conversation._id;
         this.#normalInfo = conversation.normalInfo;
         this.#user = user;

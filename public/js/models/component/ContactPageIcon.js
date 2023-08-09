@@ -1,17 +1,16 @@
 import User from "../data/User.js";
-import ChatPage from "./ChatPage.js";
+import ContactPage from "./ContactPage.js";
 
-export default class ChatPageIcon {
+export default class ContactPageIcon {
     #selectors;
     #element;
     #user;
-    #chatPage;
 
     constructor(user) {
         if (!(user instanceof User)) throw new Error("Must be user type");
 
         this.#user = user;
-        this.#selectors = "#pills-chat-tab";
+        this.#selectors = "#pills-contacts-tab";
         this.#element = document.querySelector(this.#selectors);
         this.#addClickEventListener();
     }
@@ -19,20 +18,7 @@ export default class ChatPageIcon {
     #addClickEventListener() {
         this.#element.addEventListener('click', (event) => {
             event.stopImmediatePropagation();
-            this.#chatPage ||= new ChatPage(this.#user);
+            new ContactPage(this.#user);
         })
-    }
-
-    loadChatPage() {
-        this.#chatPage = ChatPage.createdFrom(this.#user);
-        return this.#chatPage;
-    }
-
-    triggerClickEvent() {
-        this.#element.dispatchEvent(new Event('click'));
-    }
-
-    get chatPage() {
-        return this.#chatPage;
     }
 }

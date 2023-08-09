@@ -457,13 +457,13 @@
                             <!-- end user status -->
 
                             <!-- Start chat-message-list -->
-                            <div class="px-2">
+                            <div class="px-2" id="conversation-list">
                                 <h5 class="mb-3 px-3 font-size-16">Recent</h5>
 
                                 <div class="chat-message-list" data-simplebar>
             
                                     <ul class="list-unstyled chat-list chat-user-list">
-                                        <li>
+                                        <li id="646b0dd88b4dc4e5b7321263">
                                             <a href="#">
                                                 <div class="d-flex">                            
                                                     <div class="chat-user-img online align-self-center me-3 ms-0">
@@ -697,7 +697,7 @@
                                 <div class="user-chat-nav float-end">
                                     <div  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Create group">
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-link text-decoration-none text-muted font-size-18 py-0" data-bs-toggle="modal" data-bs-target="#addgroup-exampleModal">
+                                        <button id="create-group-icon" type="button" class="btn btn-link text-decoration-none text-muted font-size-18 py-0" data-bs-toggle="modal" data-bs-target="#addgroup-exampleModal">
                                             <i class="ri-group-line me-1 ms-0"></i>
                                         </button>
                                     </div>
@@ -734,177 +734,7 @@
                                                                     <h5 class="font-size-15 mb-0">Contacts</h5>
                                                                 </div>
                                                                 <div class="card-body p-2">
-                                                                    <div data-simplebar style="max-height: 150px;">
-                                                                        <div>
-                                                                            <div class="p-3 fw-bold text-primary">
-                                                                                A
-                                                                            </div>
-    
-                                                                            <ul class="list-unstyled contact-list">
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck1" checked>
-                                                                                        <label class="form-check-label" for="memberCheck1">Albert Rodarte</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck2">
-                                                                                        <label class="form-check-label" for="memberCheck2">Allison Etter</label>
-                                                                                    </div>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-    
-                                                                        <div>
-                                                                            <div class="p-3 fw-bold text-primary">
-                                                                                C
-                                                                            </div>
-    
-                                                                            <ul class="list-unstyled contact-list">
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck3">
-                                                                                        <label class="form-check-label" for="memberCheck3">Craig Smiley</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                            </ul>
-                                                                        </div>
-    
-                                                                        <div>
-                                                                            <div class="p-3 fw-bold text-primary">
-                                                                                D
-                                                                            </div>
-    
-                                                                            <ul class="list-unstyled contact-list">
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck4">
-                                                                                        <label class="form-check-label" for="memberCheck4">Daniel Clay</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                            </ul>
-                                                                        </div>
-    
-                                                                        <div>
-                                                                            <div class="p-3 fw-bold text-primary">
-                                                                                I
-                                                                            </div>
-    
-                                                                            <ul class="list-unstyled contact-list">
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck5">
-                                                                                        <label class="form-check-label" for="memberCheck5">Iris Wells</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                            </ul>
-                                                                        </div>
-    
-                                                                        <div>
-                                                                            <div class="p-3 fw-bold text-primary">
-                                                                                J
-                                                                            </div>
-    
-                                                                            <ul class="list-unstyled contact-list">
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck6">
-                                                                                        <label class="form-check-label" for="memberCheck6">Juan Flakes</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck7">
-                                                                                        <label class="form-check-label" for="memberCheck7">John Hall</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck8">
-                                                                                        <label class="form-check-label" for="memberCheck8">Joy Southern</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                            </ul>
-                                                                        </div>
-    
-                                                                        <div>
-                                                                            <div class="p-3 fw-bold text-primary">
-                                                                                M
-                                                                            </div>
-    
-                                                                            <ul class="list-unstyled contact-list">
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck9">
-                                                                                        <label class="form-check-label" for="memberCheck9">Michael Hinton</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck10">
-                                                                                        <label class="form-check-label" for="memberCheck10">Mary Farmer</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                            </ul>
-                                                                        </div>
-    
-                                                                        <div>
-                                                                            <div class="p-3 fw-bold text-primary">
-                                                                                P
-                                                                            </div>
-    
-                                                                            <ul class="list-unstyled contact-list">
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck11">
-                                                                                        <label class="form-check-label" for="memberCheck11">Phillis Griffin</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                            </ul>
-                                                                        </div>
-    
-                                                                        <div>
-                                                                            <div class="p-3 fw-bold text-primary">
-                                                                                R
-                                                                            </div>
-    
-                                                                            <ul class="list-unstyled contact-list">
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck12">
-                                                                                        <label class="form-check-label" for="memberCheck12">Rocky Jackson</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                            </ul>
-                                                                        </div>
-    
-                                                                        <div>
-                                                                            <div class="p-3 fw-bold text-primary">
-                                                                                S
-                                                                            </div>
-    
-                                                                            <ul class="list-unstyled contact-list">
-                                                                                <li>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="memberCheck13">
-                                                                                        <label class="form-check-label" for="memberCheck13">Simon Velez</label>
-                                                                                    </div>
-                                                                                </li>
-    
-                                                                            </ul>
-                                                                        </div>
+                                                                    <div id="friend-list" data-simplebar style="max-height: 150px;">
                                                                     </div>
                                                                 </div>
                                         
@@ -918,8 +748,8 @@
                                                 </form>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Create Groups</button>
+                                                <button id="close-button-1" type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                                                <button id="create-group-button" type="button" class="btn btn-primary">Create Groups</button>
                                             </div>
                                         </div>
                                     </div>
@@ -2565,12 +2395,12 @@
         <!-- end  layout wrapper -->
 
         <!-- JAVASCRIPT -->
-        <script src="/libs/ejs/ejs.js"></script>
-        <script src="/libs/ejs/ejs.min.js"></script>
         <script src="/libs/jquery/jquery.min.js"></script>
         <script src="/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="/libs/simplebar/simplebar.min.js"></script>
         <script src="/libs/node-waves/waves.min.js"></script>
+        <script src="/libs/ejs/ejs.js"></script>
+        <script src="/libs/ejs/ejs.min.js"></script>
 
         <!-- Magnific Popup-->
         <script src="/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
@@ -2580,10 +2410,8 @@
 
         <!-- page init -->
         <script src="/js/pages/index.init.js"></script>
+        <script src="/js/controllers/home.js" type="module"></script>
 
-        <script src="/js/views/user-chat-content.js"></script>
-        <script src="/js/controllers/home.js"></script>
-        <script src="/js/views/home.js"></script>
     </body>
 
 <!-- Mirrored from themesbrand.com/chatvia/layouts/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 May 2021 20:24:56 GMT -->
