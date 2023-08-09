@@ -2,9 +2,7 @@ const mongoose = require('../../database/connect');
 
 const chatLineSchema = new mongoose.Schema({
     content: String,
-    timestamp: {
-        type: String, 
-    },
+    timestamp: Date,
     userID: {
         type: mongoose.Types.ObjectId,
         ref: 'user',
