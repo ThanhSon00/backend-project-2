@@ -1,20 +1,33 @@
-import ConversationModel from "./Conversation.js";
-
 export default class User {
     #_id;
+    #normalInfo;
+    #friends;
+    
     #name;
     #avatar;
     #title;
     #email;
     #conversations;
     #onlineConversationID;
+    #lock;
 
     constructor(user) {
+        this.#normalInfo = user.normalInfo;
         this.#_id = user._id;
         this.#name = user.normalInfo.name;      
         this.#avatar = user.normalInfo.avatar;
         this.#title = user.normalInfo.title;
         this.#email = user.normalInfo.email;
+        this.#lock = false;
+        this.#resizeAvatar();
+    }
+
+    #resizeAvatar() {
+        if (!this.#avatar && !this.#normalInfo.avatar) return;
+        const names = this.#avatar.split('/');
+        const imageVersionAndName = `${names[names.length - 2]}/${names[names.length - 1]}`;
+        this.#avatar = `https://res.cloudinary.com/dfnm6sooi/image/upload/c_fill,h_200,w_200/${imageVersionAndName}`;        
+        this.#normalInfo.avatar = this.#avatar;
     }
 
     static async createdFromSession() {
@@ -32,9 +45,21 @@ export default class User {
     }
 
     async loadConversations() {
-        if (!this.#conversations) { 
-            const response = await fetch(`${window.location.origin}/api/v1/users/${this.#_id}/conversations`);
+        while(this.#lock) { 
+            await this.#delay(50); 
+        }
+        if (!this.#conversations) {
+            this.#lock = true; 
+            const response = await fetch(`/api/v1/users/${this.#_id}/conversations`);
             this.#conversations = await response.json();
+            this.#lock = false;
+        }
+    }
+
+    async loadFriends() {
+        if (!this.#friends) {
+            const response = await fetch(`/api/v1/users/${this.#_id}/friends`);
+            this.#friends = await response.json();
         }
     }
     
@@ -50,6 +75,11 @@ export default class User {
         }
     }
 
+    #delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+      
+
     get _id() {
         return this.#_id;
     }
@@ -64,5 +94,17 @@ export default class User {
 
     get title() {
         return this.#title;
+    }
+
+    set title(value) {
+        this.#title = value;
+    }
+
+    get normalInfo() {
+        return this.#normalInfo;
+    }
+
+    get friends() {
+        return this.#friends;
     }
 }

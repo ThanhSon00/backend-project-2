@@ -1,3 +1,4 @@
+import User from "../data/User.js";
 import ChatPage from "./ChatPage.js";
 
 export default class ChatPageIcon {
@@ -16,12 +17,12 @@ export default class ChatPageIcon {
     #addClickEventListener() {
         this.#element.addEventListener('click', (event) => {
             event.stopImmediatePropagation();
-            this.loadChatPage();
+            this.#chatPage ||= new ChatPage(this.#user);
         })
     }
 
     loadChatPage() {
-        this.#chatPage = new ChatPage(this.#user);
+        this.#chatPage = ChatPage.createdFrom(this.#user);
         return this.#chatPage;
     }
 
