@@ -17,12 +17,12 @@ export default class OwlStage {
         this.#onLoad();
     }   
 
-    async #onLoad() {
-        await this.#user.loadFriends();
+    #onLoad() {
         this.#element.innerHTML = "";
-        this.#user.friends.forEach(friend => {
-            const owlItem = new OwlItem(this.#user, new User(friend), this.#currentItemStyle);
+        for (let i = 0; i < this.#user.friends.length; i++) {
+            const friend = this.#user.friends[i];
+            const owlItem = new OwlItem(this.#user, friend, this.#currentItemStyle);
             this.#element.appendChild(owlItem.element);
-        })  
+        }
     }
 }

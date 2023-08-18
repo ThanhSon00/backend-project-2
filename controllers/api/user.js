@@ -182,6 +182,19 @@ const deleteUserConversation = async (req, res) => {
 
     return res.status(StatusCodes.OK).send();    
 }
+
+
+const updateUserConversation = async (req, res) => {
+    const { id, conversationID } = req.params;
+    const user = await User.findById(id);
+    const conversation = user.conversations.id(conversationID);
+    for (const attribute in req.body) {
+        conversation[attribute] = req.body[attribute];
+    }
+    user.save();
+    return res.status(StatusCodes.OK).json(user);
+}
+
 module.exports = {
     getUsers,
     createUser,
@@ -192,4 +205,5 @@ module.exports = {
     getUserFriends,
     deleteUserFriend,
     deleteUserConversation,
+    updateUserConversation
 }

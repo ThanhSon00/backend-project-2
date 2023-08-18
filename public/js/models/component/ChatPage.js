@@ -11,13 +11,13 @@ export default class ChatPage {
     constructor(user) {
         if (!(user instanceof User)) throw new Error("Must be user type");
         this.#user = user;
-        this.#owlStage = new OwlStage(user); // async
-        this.#conversationList = ConversationList.createdFrom(user); // async 
+        this.#owlStage = new OwlStage(user); 
+        this.#conversationList = ConversationList.createdFrom(user);  
     }
 
-    static async createdFrom(user) {
+    static createdFrom(user) {
         const chatPage = new ChatPage(user);
-        chatPage.#conversationList = await ConversationList.createdFrom(user);
+        chatPage.#conversationList = ConversationList.createdFrom(user);
         return chatPage;
     }
 

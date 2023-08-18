@@ -21,7 +21,7 @@ export default class SettingEditButton {
 
     #addClickEventListener() {
         this.#element.addEventListener('click', (event) => {
-            EditUserNameSection.createdFrom(this.#user, this);
+            new EditUserNameSection(this.#user, this);
             this.#nameBox.hide();
         })
     }

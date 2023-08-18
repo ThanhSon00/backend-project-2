@@ -12,6 +12,7 @@ const {
     getUserFriends,
     deleteUserFriend,
     deleteUserConversation,
+    updateUserConversation,
 } = require('../../controllers/api/user');
 
 router.route('/:id/friends')
@@ -25,6 +26,7 @@ router.route('/:id/conversations')
     .get(apiErrorHandler(getUserConversations))
 
 router.route('/:id/conversations/:conversationID')
+    .patch(apiErrorHandler(updateUserConversation))
     .delete(apiErrorHandler(deleteUserConversation))
 
 router.route('/:id')

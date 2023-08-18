@@ -19,6 +19,11 @@ export default class ChatLineBox {
         this.#displayChatLines();
     }
 
+    changeConversation(conversation) {
+        this.#conversation = conversation;
+        this.#displayChatLines();
+    }
+
     async #displayChatLines() {
         const members = await this.#conversation.loadAndGetMembers();
         const chatLines = await this.#conversation.loadAndGetChatLines();
@@ -27,11 +32,18 @@ export default class ChatLineBox {
         
         if (!chatLines) return;
         for (const chatLineData of chatLines) {
-            this.displayChatLine(chatLineData);
+            this.#insertChatLine(chatLineData);
         }
+
+        this.#moveToBottom();
+    }
+    
+    displayChatLine(chatLine) {
+        this.#insertChatLine(chatLine);
+        this.#moveToBottom();
     }
 
-    displayChatLine(chatLineData) {
+    #insertChatLine(chatLineData) {
         const chatLineElement = this.#createUserChatLineElement(chatLineData);
         const chatLineContentElement = chatLineElement.querySelector('.ctext-wrap');
         const lastChatLineElement = this.#element.lastElementChild;
@@ -66,6 +78,10 @@ export default class ChatLineBox {
         return chatLineElement;
     }
 
+    #moveToBottom() {
+        const simpleBar = document.querySelectorAll('.simplebar-content-wrapper')[6];
+        simpleBar.scrollTop = simpleBar.scrollHeight;
+    }
     
     get user() {
         return this.#user;

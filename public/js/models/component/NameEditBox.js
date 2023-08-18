@@ -18,7 +18,7 @@ export default class NameEditBox {
         this.#element.addEventListener('keypress', (event) => {
             event.stopImmediatePropagation();
             if (event.key === "Enter") {
-                this.#editUserNameSection.SaveChangedButton.triggerClick();
+                this.#editUserNameSection.saveChangedButton.triggerClick();
             }
         })
     }

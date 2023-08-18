@@ -6,7 +6,7 @@ export default class ProfileImageInput {
     constructor() {
         this.#selectors = "#image-file-input";
         this.#element = document.querySelector(this.#selectors);
-        this.#profileImageDisplay = document.querySelector('#profile-image');
+        this.#profileImageDisplay = document.querySelector('#profile-image img');
         this.#addChangeEventListener();
     }
 

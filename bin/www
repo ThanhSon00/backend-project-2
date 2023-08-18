@@ -9,6 +9,7 @@ var app = require('../app');
 var debug = require('debug')('backend-project-2:server');
 const http = require('http');
 const https = require('https');
+const { Server } = require("socket.io");
 
 /**
  * Get port from environment and store in Express.
@@ -31,6 +32,34 @@ else if (process.env.ENV === "development") {
     cert: fs.readFileSync('./certs/tls.cert')
   }, app);
 }
+
+// Realtime
+const io = new Server(server);
+io.on('connection', (socket) => {
+  let userID, conversationIDList, friendIDList, userData;
+
+  socket.on('user enter page', (user) => {
+    userData = user;
+    userID = user._id;
+    friendIDList = user.friends.map(friend => friend._id);
+    conversationIDList = user.conversations.map(conversation => conversation._id);
+    socket.join([...conversationIDList, ...friendIDList, user._id]);
+    socket.to(friendIDList)
+          .emit(`your friend is online`, user);
+  })
+
+  socket.on(`send your status to friends`, (friend) => {
+    socket.to(friendIDList).emit("user receive friend status", friend);
+  })
+
+  socket.on('send chatLine to server', (chatLine) => {
+    socket.to(chatLine.conversationID).emit(`conversation receive chatLine`, chatLine);
+  })  
+
+  socket.on('disconnect', () => {
+    socket.to(friendIDList).emit("your friend has been offline", userData);
+  });
+})
 /**
  * Listen on provided port, on all network interfaces.
  */

@@ -10,11 +10,13 @@ export default class OwlItem {
     
     constructor(user, friend, elementStyle) {
         if (!(user instanceof User)) throw new Error('Must be user type');
-        if (!(friend instanceof User)) throw new Error('Must be user type');
+
         this.#friend = friend;    
         this.#elementStyle = elementStyle;
         this.#user = user;
         this.#createElement();
+        
+        friend.owlItem = this;
     }
 
     #createElement() {
@@ -24,12 +26,15 @@ export default class OwlItem {
         owlItemElement.innerHTML = getOwlItemHTML(this.#friend);
         owlItemElement.id = this.#friend._id;
         this.#element = owlItemElement;
+        this.updateStatus();
         this.#addClickEventListener();
     }
 
-    async #addClickEventListener() {
-        await this.#user.loadConversations();
-        const userConversations = this.#user.conversations;
+    updateStatus() {
+        this.#element.querySelector('span').className = (this.#friend.isOnline) ? "user-status" : "";
+    }
+
+    #addClickEventListener() {
         const conversationHasFriend = (conversation) => {
             for (let i = 0; i < conversation.members.length; i++) {
                 const member = conversation.members[i];
@@ -39,7 +44,7 @@ export default class OwlItem {
             }
             return false;
         }
-        const conversation = userConversations.find(conversationHasFriend);
+        const conversation = this.#user.conversations.find(conversationHasFriend);
         this.#element.addEventListener('click', (event) => {
             event.stopImmediatePropagation();
             document.querySelector(`li[id="${conversation._id}"]`).dispatchEvent(new Event('click'));

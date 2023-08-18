@@ -19,7 +19,7 @@ export const conversationTemplate = `
         <div class="d-flex">                            
             <div class="chat-user-img online align-self-center me-3 ms-0">
                 <%- avatarHTML %>
-                <span class="user-status"></span>
+                <span></span>
             </div>
 
         <div class="flex-1 overflow-hidden">
@@ -124,7 +124,7 @@ export const owlItemTemplate = `
     <a href="#" class="user-status-box">
         <div class="avatar-xs mx-auto d-block chat-user-img online">
             <%- avatarHTML %>
-            <span class="user-status"></span>
+            <span></span>
         </div>
 
         <h5 class="font-size-13 text-truncate mt-3 mb-1"><%= friend.normalInfo.title %></h5>

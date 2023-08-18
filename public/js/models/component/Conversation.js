@@ -1,50 +1,58 @@
 import { getConversationHTML } from "../../views/home.js";
+import ConversationData from "../data/Conversation.js";
 import User from "../data/User.js"
 import ChatHeader from "./ChatHeader.js";
 import ChatLineBox from "./ChatLineBox.js";
 import ChatLineInput from "./ChatLineInput.js";
+import ConversationList from "./ConversationList.js";
 import SendChatLineBtn from "./SendChatLineBtn.js";
 
 export default class Conversation {
-    #_id;
-    #name;
+    static chatLineBox;
     #chatLines;
     #members;
     #isGroup;
-    #latestChatLine;
     #avatar;
     #normalInfo;
     #element;
     #user;
+    #conversationData;
+    #lastSeenChatLine;
+    #conversationList;
+    #latestChatLine;
 
-    constructor(conversation, user) {
-        if (!(user instanceof User)) throw new Error("Must be user type");
+    constructor(conversationData, conversationList) {
+        if (!(conversationData instanceof ConversationData)) throw new Error("Must be conversation data");
+        if (!(conversationList instanceof ConversationList)) throw new Error("Must be conversation list type");
 
-        this.#_id = conversation._id;
-        this.#normalInfo = conversation.normalInfo;
-        this.#user = user;
+        this.#lastSeenChatLine = conversationData.lastSeenChatLine;
+        this.#conversationList = conversationList;
+        this.#conversationData = conversationData;
+        this.#user = conversationList.user;
+        this.#conversationData.component = this;
     }
 
-    static async createdFrom(conversationData, user) {
-        const conversation = new Conversation(conversationData, user);
+    static async createdFrom(conversationData, conversationList) {
+        const conversation = new Conversation(conversationData, conversationList);
         await conversation.#createElement();
         return conversation;
     }
 
     async #createElement() {
+        if (this.#element) return;
         await this.#loadLatestChatLine();
         const conversationElement = document.createElement('li');
-        const conversationHTML = getConversationHTML(this);
-
-        conversationElement.id = this.#_id;
+        const conversationHTML = getConversationHTML(this.#conversationData);
+        conversationElement.id = this.#conversationData._id;
         conversationElement.innerHTML = conversationHTML;
         this.#element = conversationElement;
         this.updateStatus(this.#latestChatLine);
         this.#addClickEventHandler();
+        this.#user.loadSocketOnConversation(this);
     }
 
     async #loadLatestChatLine() {
-        const response1 = await fetch(`/api/v1/conversations/${this.#_id}/chat-lines?sort_by=-timestamp&limit=1`);
+        const response1 = await fetch(`/api/v1/conversations/${this.#conversationData._id}/chat-lines?sort_by=-timestamp&limit=1`);
         if (!response1.ok) return;
         const chatLines = await response1.json();
         this.#latestChatLine = chatLines[0];
@@ -55,10 +63,20 @@ export default class Conversation {
     }
 
     updateStatus(latestChatLine) {
+        this.#updateOnlineStatus();
         if (!latestChatLine) return;
         this.#latestChatLine = latestChatLine;
         this.#changeLatestChatLine(latestChatLine);
         this.#changeTimeDifference(latestChatLine);
+    }
+
+    #updateOnlineStatus() {
+        const userStatus = document.createElement('span');
+        userStatus.className = 'user-status';
+        if (this.#conversationData.isOnline) {
+            this.#element.querySelector('span').className = 'user-status';    
+        } else this.#element.querySelector('span').className = '';    
+
     }
 
     #changeLatestChatLine(latestChatLine) {
@@ -110,18 +128,26 @@ export default class Conversation {
     #addClickEventHandler() {
         this.#element.addEventListener('click', (event) => {
             const user = this.#user;
-            const chatLineBox = new ChatLineBox(this, user);
+            if (!Conversation.chatLineBox) {
+                Conversation.chatLineBox = new ChatLineBox(this, user);
+            } else Conversation.chatLineBox.changeConversation(this);
+            const chatLineBox = Conversation.chatLineBox;
             const chatLineInput = new ChatLineInput(chatLineBox);
             const sendChatLineBtn = new SendChatLineBtn(chatLineInput, chatLineBox);
-            const chatHeader = new ChatHeader(this);
+            const chatHeader = new ChatHeader(this.#conversationData);
 
-            const simpleBar = document.querySelectorAll('.simplebar-content-wrapper')[6];
-            simpleBar.scrollTop = simpleBar.scrollHeight;
+            this.active = true;
+            this.#moveToBottom();
         })
     }
 
+    #moveToBottom() {
+        const simpleBar = document.querySelectorAll('.simplebar-content-wrapper')[6];
+        simpleBar.scrollTop = simpleBar.scrollHeight;
+    }
+
     async loadAndGetChatLines() {
-        const response = await fetch(`/api/v1/conversations/${this.#_id}/chat-lines`);
+        const response = await fetch(`/api/v1/conversations/${this.#conversationData._id}/chat-lines`);
         if (!response.ok) return;
         const chatLines = await response.json();
         this.#chatLines = chatLines;
@@ -129,7 +155,7 @@ export default class Conversation {
     }
 
     async loadAndGetMembers() {
-        const response = await fetch(`/api/v1/conversations/${this.#_id}/users`);
+        const response = await fetch(`/api/v1/conversations/${this.#conversationData._id}/users`);
         const users = await response.json();
         const members = [];
         users.forEach((user) => members.push(new User(user)))
@@ -137,8 +163,29 @@ export default class Conversation {
         return this.#members;
     }
 
+    set active(value) {
+        if (value === true) {
+            for (const component of this.#conversationList.components) {
+                if (!(component instanceof Conversation)) throw new Error("Must be conversation component type");
+                if (component.#element.classList.contains('active')) {
+                    fetch(`/api/v1/users/${component.#user._id}/conversations/${component._id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ lastSeenChatLine: component.#lastSeenChatLine._id })
+                    })
+                    component.#element.classList.remove('active');
+                }
+            }
+            this.#element.classList.add('active');
+        } else if (value === false) {
+            this.#element.classList.remove('active');
+        }
+    }
+
     get _id() {
-        return this.#_id;
+        return this.#conversationData._id;
     }
 
     get members() {
@@ -153,35 +200,28 @@ export default class Conversation {
         return this.#element;
     }
 
-    get name() {
-        return this.#normalInfo.name;
-    }
-
     get isGroup() {
         return this.#normalInfo.isGroup;
     }
     
-    get latestChatLine() {
-        return this.#latestChatLine;
-    }
-    
-    get avatar() {
-        return this.#normalInfo.avatar;
+    get lastSeenChatLine() {
+        return this.#conversationData.lastSeenChatLine;
     }
     
     get normalInfo() {
-        return this.#normalInfo;
+        return this.#conversationData.normalInfo;
     }
-
-    get avatar() {
-        return this.#normalInfo.avatar;
-    }
+    
 
     get user() {
         return this.#user;
     }
 
     set name(name) {
-        this.#name = name;
+        this.#conversationData.normalInfo.name = name;
+    }
+
+    set lastSeenChatLine(value) {
+        this.#lastSeenChatLine = value;
     }
 }

@@ -7,6 +7,7 @@ export default class SendChatLineBtn {
     #chatLineBox
     #element
     #selectors
+    #user
 
     constructor(chatLineInput, chatLineBox) {
         if (!(chatLineBox instanceof ChatLineBox)) throw Error("Must be ChatLineBox type");
@@ -16,6 +17,7 @@ export default class SendChatLineBtn {
         this.#chatLineInput = chatLineInput;
         this.#selectors = ".btn.btn-primary.font-size-16.btn-lg.chat-send.waves-effect.waves-light";
         this.#element = document.querySelector(this.#selectors);
+        this.#user = chatLineBox.user;
 
         const newCloneElement = this.#element.cloneNode(true);
         this.#element.parentNode.replaceChild(newCloneElement, this.#element);
@@ -31,7 +33,7 @@ export default class SendChatLineBtn {
     }
 
     #clickEventHandler() {
-        const userID = this.#chatLineBox.user._id;
+        const userID = this.#user._id;
         const content = this.#chatLineInput.content;
 
         if (!content) return;
@@ -48,13 +50,11 @@ export default class SendChatLineBtn {
             const chatLine = await response.json();
 
             chatLine.user = this.#chatLineBox.user;
+            this.#user.sendMessage(chatLine);
+            this.#chatLineBox.conversation.lastSeenChatLine = chatLine;
             this.#chatLineBox.conversation.updateStatus(chatLine);
             this.#chatLineBox.displayChatLine(chatLine);
-
             this.#chatLineInput.eraseContent();
-
-            const simpleBar = document.querySelectorAll('.simplebar-content-wrapper')[6];
-            simpleBar.scrollTop = simpleBar.scrollHeight;
         })
     }
 

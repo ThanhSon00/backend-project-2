@@ -34,6 +34,10 @@ const smallConversationSchema = mongoose.Schema({
         type: mongoose.Types.ObjectId, 
         ref: 'conversation'
     },
+    lastSeenChatLine: {
+        type: mongoose.Types.ObjectId, 
+        ref: 'chatline'    
+    }
 }, { _id: false })
 
 const conversationSchema = new mongoose.Schema({
