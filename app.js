@@ -12,7 +12,6 @@ const userRoutes = require('./routes/api/user');
 const formRoutes = require('./routes/api/form');
 const sessionServiceRoutes = require('./routes/api/session');
 const conversationRoutes = require('./routes/api/conversation');
-const chatLineRoutes = require('./routes/api/chatLine');
 const cloudRoutes = require('./routes/api/cloud');
 
 const authenticationRoutes = require('./routes/authentication');
@@ -51,7 +50,6 @@ app.use('/whoami', authenticateUser, credentialRoutes);
 // Rest api
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/conversations', conversationRoutes);
-app.use('/api/v1/chat-lines', chatLineRoutes);
 
 // Normal api
 app.use('/api/v1/forms', formRoutes);
