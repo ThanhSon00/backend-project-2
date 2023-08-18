@@ -10,7 +10,7 @@ const makeRequest = async (path, method, body, callback) => {
     if (!body) body = {};
     let response, err;
     const requestOptions = {
-        url: `${originURL}${path}`,
+        url: `${path}`,
         method: method,
         data: JSON.stringify(body),
         headers: {
