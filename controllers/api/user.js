@@ -64,6 +64,7 @@ const updateUser = async (req, res) => {
             }
         }
     }
+
     userDoc.save();
     return res.status(StatusCodes.OK).json(userDoc);
 }

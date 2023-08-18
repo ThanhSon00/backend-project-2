@@ -12,12 +12,12 @@ const uploadFile = async (req, res) => {
         })
     }
 
+    const result = await streamUpload(req);
     // Check if the Cloudinary upload was successful
     if (!result || !result.secure_url) {
         throw new Error("Error uploading the file to Cloudinary.");
     }
-    const result = await streamUpload(req);
-    const updatedData = { 'normalInfo.avatar': result?.secure_url };
+    const updatedData = { 'normalInfo.avatar': result.secure_url };
     const updatedUser = await UserModel.updateUser(user._id, updatedData);
     return res.status(StatusCodes.CREATED).json(updatedUser);
 }
