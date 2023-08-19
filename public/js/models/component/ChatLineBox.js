@@ -12,6 +12,7 @@ export default class ChatLineBox {
         if (!(conversation instanceof Conversation)) throw new Error("Must be conversation type");
         if (!(user instanceof User)) throw new Error("Must be user type");
 
+        this.#displayBox();
         this.#conversation = conversation;
         this.#user = user;
         this.#selectors = "ul.list-unstyled.mb-0";
@@ -19,9 +20,11 @@ export default class ChatLineBox {
         this.#displayChatLines();
     }
 
-    changeConversation(conversation) {
-        this.#conversation = conversation;
-        this.#displayChatLines();
+    #displayBox() {
+        const box = document.querySelector('.user-chat.w-100');
+        const welcomeSection = document.querySelector('.chat-welcome-section');
+        welcomeSection.classList.add('d-none');
+        box.classList.remove('d-none');
     }
 
     async #displayChatLines() {
@@ -82,7 +85,12 @@ export default class ChatLineBox {
         const simpleBar = document.querySelectorAll('.simplebar-content-wrapper')[6];
         simpleBar.scrollTop = simpleBar.scrollHeight;
     }
-    
+ 
+    changeConversation(conversation) {
+        this.#conversation = conversation;
+        this.#displayChatLines();
+    }
+
     get user() {
         return this.#user;
     }

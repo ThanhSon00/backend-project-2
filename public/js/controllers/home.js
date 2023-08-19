@@ -22,7 +22,7 @@ import { getAvatarHTML } from "../views/home.js";
     
 
     new ThemeIcon();
-    new ChatPageIcon(user);
+    new ChatPageIcon(user).triggerClickEvent();
     new GroupPageIcon(user);
     new ContactPageIcon(user);
     new SettingIcon(user);    
