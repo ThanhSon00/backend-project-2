@@ -3,9 +3,7 @@
 
 This project for person who wants to have an application that has features such as send, receive message, create group, add friend, change personal information
 
-<p align="center">
-  <img src="[http://some_place.com/image.png](https://th.bing.com/th/id/R.37cbc9c5d75e85b4056dbccae52292d4?rik=VRUX8s5rCP6a9g&riu=http%3a%2f%2fchatvia-light.vue.themesbrand.com%2fimg%2flogo-dark.37cbc9c5.png&ehk=lwh%2bhezx4O4UyZxEOxg%2bAbjfWZItc8XmSmc0lgJWjEw%3d&risl=&pid=ImgRaw&r=0)" />
-</p>
+![Logo](https://th.bing.com/th/id/R.37cbc9c5d75e85b4056dbccae52292d4?rik=VRUX8s5rCP6a9g&riu=http%3a%2f%2fchatvia-light.vue.themesbrand.com%2fimg%2flogo-dark.37cbc9c5.png&ehk=lwh%2bhezx4O4UyZxEOxg%2bAbjfWZItc8XmSmc0lgJWjEw%3d&risl=&pid=ImgRaw&r=0)
 
 ## Author
 
