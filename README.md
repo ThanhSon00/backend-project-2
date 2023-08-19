@@ -13,6 +13,7 @@ This project for person who wants to have an application that has features such 
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
+<a href='https://mail.google.com/' target="_blank"><img alt='Gmail' src='https://img.shields.io/badge/phanson999999@gmail.com-100000?style=social&logo=Gmail&logoColor=BA0000&labelColor=27895B&color=D02929'/></a>
 
 ## Author
 
