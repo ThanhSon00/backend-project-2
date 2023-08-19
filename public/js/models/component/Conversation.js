@@ -168,19 +168,25 @@ export default class Conversation {
             for (const component of this.#conversationList.components) {
                 if (!(component instanceof Conversation)) throw new Error("Must be conversation component type");
                 if (component.#element.classList.contains('active')) {
-                    fetch(`/api/v1/users/${component.#user._id}/conversations/${component._id}`, {
-                        method: "PATCH",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ lastSeenChatLine: component.#lastSeenChatLine._id })
-                    })
+                    this.#saveLastSeenChatLine(component);
                     component.#element.classList.remove('active');
                 }
             }
             this.#element.classList.add('active');
         } else if (value === false) {
             this.#element.classList.remove('active');
+        }
+    }
+
+    #saveLastSeenChatLine(component) {
+        if (component.#lastSeenChatLine) {
+            fetch(`/api/v1/users/${component.#user._id}/conversations/${component._id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ lastSeenChatLine: component.#lastSeenChatLine._id })
+            })
         }
     }
 
