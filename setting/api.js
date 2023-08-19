@@ -2,9 +2,13 @@ const axios = require('axios');
 const domain = process.env.DOMAIN;
 const protocol = process.env.PROTOCOL;
 const port = process.env.PORT;
-const originURL = `${protocol}://${domain}:${port}`;
+let originURL = `${protocol}://${domain}:${port}`;
 const fs = require('fs');
 const https = require('https');
+
+if (process.env.ENV === "production") {
+    originURL = `${protocol}://${domain}`;
+}
 
 const makeRequest = async (path, method, body, callback) => {
     if (!body) body = {};
