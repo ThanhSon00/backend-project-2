@@ -13,7 +13,6 @@ This project for person who wants to have an application that has features such 
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
-<a href='https://mail.google.com/' target="_blank"><img alt='Gmail' src='https://img.shields.io/badge/phanson999999@gmail.com-100000?style=social&logo=Gmail&logoColor=BA0000&labelColor=27895B&color=D02929'/></a>
 
 ## Author
 
@@ -59,22 +58,43 @@ https://chat-application-09xl.onrender.com
 **Server:** NodeJS, ExpressJS, MongoDB
 
 
+## Optimizations
+
+What optimizations did you make in your code? E.g. refactors, performance improvements, accessibility
+
+
 ## Feedback
 
 If you have any feedback, please reach out to me at phanson999999@gmail.com
+
+
+## Lessons Learned
+**NoSQL**
+
+I had first approach to NoSQL database (**MongoDB**), knew some popular terminologies such as document, subdocument, schema, .... Having basic knowlegde about relationship in document database. For related **ORM**, I had got that using subdocument and pre-hook would benefit of flexible structure of schema.
+
+**Security**
+
+Beside access and refresh tokens, I had first time to implement "remember token" for maintaining long session. 
+
+Using "Lock Token" for temporary attribute of reset password link.
+
+**Realtime**
+
+I used **Socket.io** library as for features working in realtime.   
+
+**Others**
+
+What did you learn while building this project? What challenges did you face and how did you overcome them?
 
 
 ## 🚀 About Me
 I'm a Back-end Developer Intern. Studying at Ho Chi Minh University of Technology and Education as 4th-year student, I have learned and used NodeJS and ExpressJS for 8 months ... 
 
 
-## Lessons Learned
-### NoSQL
+## Acknowledgements
 
-I had first approach to NoSQL database (MongoDB), knew some popular terminologies such as document, subdocument, schema, .... Having basic knowlegde about relationship in document database. For the ORM, I had got that using subdocument and pre-hook would benefit of flexible structure of schema.
-
-### Security
-
-Beside access and refresh tokens, I had first time to implement remember token for maintaining long session. 
-
+ - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
+ - [Awesome README](https://github.com/matiassingers/awesome-readme)
+ - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
 
