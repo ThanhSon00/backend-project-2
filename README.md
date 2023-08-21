@@ -23,6 +23,19 @@ This project for person who wants to have an application that has features such 
 
 https://chat-application-09xl.onrender.com
 
+Using these accounts or your Google Account to log in:
+
+tester1@gmail.com
+
+tester1@gmai2.com
+
+tester1@gmai3.com
+
+tester1@gmai4.com
+
+Password: 123456
+
+_Note: Unable to use reset password feature when using these testing account above_
 
 ## Features
 
@@ -58,11 +71,6 @@ https://chat-application-09xl.onrender.com
 **Server:** NodeJS, ExpressJS, MongoDB
 
 
-## Optimizations
-
-What optimizations did you make in your code? E.g. refactors, performance improvements, accessibility
-
-
 ## Feedback
 
 If you have any feedback, please reach out to me at phanson999999@gmail.com
@@ -86,11 +94,6 @@ I used **Socket.io** library as for features working in realtime.
 **Others**
 
 What did you learn while building this project? What challenges did you face and how did you overcome them?
-
-
-## 🚀 About Me
-I'm a Back-end Developer Intern. Studying at Ho Chi Minh University of Technology and Education as 4th-year student, I have learned and used NodeJS and ExpressJS for 8 months ... 
-
 
 ## Acknowledgements
 
