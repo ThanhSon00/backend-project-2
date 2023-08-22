@@ -91,10 +91,6 @@ Using "Lock Token" for temporary attribute of reset password link.
 
 I used **Socket.io** library as for features working in realtime.   
 
-**Others**
-
-What did you learn while building this project? What challenges did you face and how did you overcome them?
-
 ## Acknowledgements
 
  - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
