@@ -40,10 +40,10 @@ _Note: Unable to use reset password feature when using these testing account abo
 ## Features
 
 - Light/dark mode toggle
-- Send, receive message
+- Send, receive message in real-time
 - Add friend, create group
 - Display online status
-- Change avatar, title
+- Change personal avatar, title
 - Login with short or long session
 - Reset password
 - Support Google login
