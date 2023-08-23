@@ -41,7 +41,7 @@ _Note: Unable to use reset password feature when using these testing account abo
 
 - Light/dark mode toggle
 - Send, receive message
-- Add friend
+- Add friend, create group
 - Display online status
 - Change avatar, title
 - Login with short or long session
